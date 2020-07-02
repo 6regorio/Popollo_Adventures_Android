@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Popollo_Adventures_Android</string>
+    <string name="atacar">Atacar</string>
+    <string name="defender">Defender</string>
+    <string name="habilidades">Habilidades</string>
+    <string name="objetos">Objetos</string>
 </resources>
