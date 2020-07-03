@@ -32,15 +32,21 @@
             android:layout_weight="1">
 
             <LinearLayout
+                android:id="@+id/LinearLayourHeroe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
+                android:background="@drawable/border_combat_box"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imagenHeroe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop" />
 
@@ -90,23 +96,38 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView2"
+            <ListView
+                android:id="@+id/listViewCombatLog"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="40dp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:background="@drawable/log_border"
+                android:transcriptMode="alwaysScroll"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
+                android:id="@+id/LinearLayourEnemigo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
+                android:background="@drawable/border_combat_box"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imagenEnemigo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop" />
 
@@ -159,6 +180,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/LinearLayoutBotonesPrincipales"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -169,6 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="comandoAtacar"
                 android:text="@string/atacar" />
 
             <Button
@@ -176,6 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="comandoDefender"
                 android:text="@string/defender" />
 
             <Button
@@ -183,6 +207,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="comandoHabilidades"
                 android:text="@string/habilidades" />
 
             <Button
@@ -190,7 +215,88 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="comandoObjetos"
                 android:text="@string/objetos" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutHabilidades"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnHabilidad1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="H1" />
+
+            <Button
+                android:id="@+id/btnHabilidad2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="H2" />
+
+            <Button
+                android:id="@+id/btnHabilidad3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="H3" />
+
+            <Button
+                android:id="@+id/btnVolverHabilidades"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="comandoVolver"
+                android:text="@string/volver" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutObjetos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnObjeto1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="O1"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btnObjeto2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="O2"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btnObjeto3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="O3"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btnVolverObjetos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="comandoVolver"
+                android:text="@string/volver" />
         </LinearLayout>
     </LinearLayout>
 
