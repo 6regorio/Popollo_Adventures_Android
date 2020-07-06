@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mystra77.popollo_adventures_android.clases.Personaje;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class ActivityCombate extends AppCompatActivity {
     ArrayList<String> logsLines;
     Button botonAtaque, botonDefensa, botonHabilidad, botonObjeto, botonHabilidad1, botonHabilidad2, botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3, botonVolverHabilidades, botonVolverObjetos;
     LinearLayout cajaBotonesPrincipales, cajaBotonesHabilidades, cajaBotonesObjetos;
+    Personaje heroe, enemigo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,25 +76,27 @@ public class ActivityCombate extends AppCompatActivity {
         Glide.with(this).load(R.drawable.combat_popollo).into(imagenHeroeCombate);
         Glide.with(this).load(R.drawable.combat_poi).into(imagenEnemigoCombate);
 
-        barraSaludHeroe.setMax(100);
-        barraSaludHeroe.setProgress(100);
-        saludHeroeCombate.setText(barraSaludHeroe.getProgress() + "/" + barraSaludHeroe.getMax());
+        heroe = new Personaje("Popollo", 100, 100, 10, 10, 5);
+        barraSaludHeroe.setMax(heroe.getSaludMaxima());
+        barraSaludHeroe.setProgress(heroe.getSalud());
+        saludHeroeCombate.setText(heroe.getSalud() + "/" + heroe.getSaludMaxima());
         barraManaHeroe.setMax(100);
         barraManaHeroe.setProgress(100);
         manaHeroeCombate.setText(barraSaludHeroe.getProgress() + "/" + barraSaludHeroe.getMax());
 
-        barraSaludEnemigo.setMax(100);
-        barraSaludEnemigo.setProgress(100);
-        saludEnemigoCombate.setText(barraSaludHeroe.getProgress() + "/" + barraSaludHeroe.getMax());
+        enemigo = new Personaje("Poring", 100, 100, 10, 10, 5);
+        barraSaludEnemigo.setMax(enemigo.getSaludMaxima());
+        barraSaludEnemigo.setProgress(enemigo.getSalud());
+        saludEnemigoCombate.setText(enemigo.getSalud() + "/" + enemigo.getSaludMaxima());
         barraManaEnemigo.setMax(100);
         barraManaEnemigo.setProgress(100);
         manaEnemigoCombate.setText(barraSaludEnemigo.getProgress() + "/" + barraSaludEnemigo.getMax());
     }
 
     public void comandoAtacar(View view) {
-        barraSaludEnemigo.setProgress(barraSaludEnemigo.getProgress() - 10);
-        saludEnemigoCombate.setText(barraSaludEnemigo.getProgress()+"/"+barraSaludEnemigo.getMax());
-        logsLines.add("Recibe 10");
+        logsLines.add(heroe.atacarObjetivo(enemigo));
+        barraSaludEnemigo.setProgress(enemigo.getSalud());
+        saludEnemigoCombate.setText(enemigo.getSalud()+"/"+enemigo.getSaludMaxima());
         adapterLog.notifyDataSetChanged();
     }
 
