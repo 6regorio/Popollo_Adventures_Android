@@ -1,11 +1,10 @@
 package com.mystra77.popollo_adventures_android.clases;
 
-import com.mystra77.popollo_adventures_android.exceptions.InvalidadNumeroHabilidadException;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Personaje {
+public class Personaje implements Serializable {
 
     private String nombre;
     private int salud;
@@ -19,8 +18,12 @@ public class Personaje {
     private ArrayList<Habilidad> habilidadesArray;
     private int dinero;
     private int experiencia;
+    private int imagenCombate;
+    private int imagenMuerte;
 
-    public Personaje(String nombre, int salud, int saludMaxima, int mana, int manaMaximo, int fuerza, int magia, int agilidad, int defensa, ArrayList<Habilidad> habilidadesArray, int dinero, int experiencia) throws InvalidadNumeroHabilidadException {
+    public Personaje(String nombre, int salud, int saludMaxima, int mana, int manaMaximo, int fuerza,
+                     int magia, int agilidad, int defensa, ArrayList<Habilidad> habilidadesArray,
+                     int dinero, int experiencia, int imagenCombate, int imagenMuerte) {
         this.nombre = nombre;
         this.salud = salud;
         this.saludMaxima = saludMaxima;
@@ -33,15 +36,8 @@ public class Personaje {
         this.habilidadesArray = habilidadesArray;
         this.dinero = dinero;
         this.experiencia = experiencia;
-    }
-
-    public Personaje(String nombre, int salud, int saludMaxima, int fuerza, int agilidad, int defensa) {
-        this.nombre = nombre;
-        this.salud = salud;
-        this.saludMaxima = saludMaxima;
-        this.fuerza = fuerza;
-        this.agilidad = agilidad;
-        this.defensa = defensa;
+        this.imagenCombate = imagenCombate;
+        this.imagenMuerte = imagenMuerte;
     }
 
     public String getNombre() {
@@ -120,13 +116,8 @@ public class Personaje {
         return habilidadesArray;
     }
 
-    public void setHabilidadesArray(ArrayList<Habilidad> habilidadesArray) throws InvalidadNumeroHabilidadException {
-        if (habilidadesArray.size() == 3) {
-            this.habilidadesArray = habilidadesArray;
-        } else {
-            throw new InvalidadNumeroHabilidadException("El numero de habilidades deben ser 3 obligatoriamente.");
-        }
-
+    public void setHabilidadesArray(ArrayList<Habilidad> habilidadesArray) {
+        this.habilidadesArray = habilidadesArray;
     }
 
     public int getDinero() {
@@ -145,8 +136,23 @@ public class Personaje {
         this.experiencia = experiencia;
     }
 
-    //Funciones
+    public int getImagenCombate() {
+        return imagenCombate;
+    }
 
+    public void setImagenCombate(int imagenCombate) {
+        this.imagenCombate = imagenCombate;
+    }
+
+    public int getImagenMuerte() {
+        return imagenMuerte;
+    }
+
+    public void setImagenMuerte(int imagenMuerte) {
+        this.imagenMuerte = imagenMuerte;
+    }
+
+    //Funciones
     public String atacarObjetivo(Personaje objetivo) {
         boolean critico = false;
         boolean fallo = false;
@@ -185,6 +191,14 @@ public class Personaje {
                 return resultado = objetivo.nombre + " **Bloquea el ataque**";
             }
         }
+    }
+
+    public String lanzarHechizo(Personaje objetivo, int numeroHabilidad){
+        String resultado;
+        int dañoRealizado = habilidadesArray.get(numeroHabilidad).getPoder() * magia;
+        objetivo.setSalud(objetivo.salud - dañoRealizado);
+        mana = mana - habilidadesArray.get(numeroHabilidad).getCoste();
+        return resultado = objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
     }
 
 }

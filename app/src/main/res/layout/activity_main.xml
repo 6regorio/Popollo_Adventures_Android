@@ -6,24 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:onClick="combatir"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pantalla_inicio" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageView">
+
+        <Button
+            android:id="@+id/btnNuevaPartida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="irAPrincipal"
+            android:text="@string/nuevaPartida"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnContinuar"
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:text="@string/continuar"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnGaleria"
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:text="@string/galeria"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnSalir"
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:onClick="salir"
+            android:text="@string/salir"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

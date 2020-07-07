@@ -2,6 +2,7 @@ package com.mystra77.popollo_adventures_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,20 +16,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mystra77.popollo_adventures_android.clases.Personaje;
+import com.mystra77.popollo_adventures_android.clases.Enemigo;
+import com.mystra77.popollo_adventures_android.clases.Heroe;
+import com.mystra77.popollo_adventures_android.datos.CargarDatos;
 
 import java.util.ArrayList;
 
 public class ActivityCombate extends AppCompatActivity {
-    ImageView imagenHeroeCombate, imagenEnemigoCombate;
-    TextView saludHeroeCombate, manaHeroeCombate, saludEnemigoCombate, manaEnemigoCombate;
-    ProgressBar barraSaludHeroe, barraManaHeroe, barraSaludEnemigo, barraManaEnemigo;
-    ListView combatLog;
-    ArrayAdapter<String> adapterLog;
-    ArrayList<String> logsLines;
-    Button botonAtaque, botonDefensa, botonHabilidad, botonObjeto, botonHabilidad1, botonHabilidad2, botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3, botonVolverHabilidades, botonVolverObjetos;
-    LinearLayout cajaBotonesPrincipales, cajaBotonesHabilidades, cajaBotonesObjetos;
-    Personaje heroe, enemigo;
+    private ImageView imagenHeroeCombate, imagenEnemigoCombate;
+    private TextView saludHeroeCombate, manaHeroeCombate, saludEnemigoCombate, manaEnemigoCombate;
+    private ProgressBar barraSaludHeroe, barraManaHeroe, barraSaludEnemigo, barraManaEnemigo;
+    private ListView combatLog;
+    private ArrayAdapter<String> adapterLog;
+    private ArrayList<String> logsLines;
+    private Button botonAtaque, botonDefensa, botonHabilidad, botonObjeto, botonHabilidad1,
+            botonHabilidad2, botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3,
+            botonVolverHabilidades, botonVolverObjetos;
+    private LinearLayout cajaBotonesPrincipales, cajaBotonesHabilidades, cajaBotonesObjetos;
+    private Heroe heroe;
+    private Enemigo enemigo;
+    private Intent intent;
+    private int seleccionEnemigo;
+    private CargarDatos cargarDatos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +45,8 @@ public class ActivityCombate extends AppCompatActivity {
 
         //Eliminando barra de estado
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_combate);
 
         cajaBotonesPrincipales = findViewById(R.id.LinearLayoutBotonesPrincipales);
@@ -73,31 +83,23 @@ public class ActivityCombate extends AppCompatActivity {
         combatLog.setAdapter(adapterLog);
         combatLog.setEnabled(false);
 
-        Glide.with(this).load(R.drawable.combat_popollo).into(imagenHeroeCombate);
-        Glide.with(this).load(R.drawable.combat_poi).into(imagenEnemigoCombate);
 
-        heroe = new Personaje("Popollo", 100, 100, 10, 10, 5);
-        barraSaludHeroe.setMax(heroe.getSaludMaxima());
-        barraSaludHeroe.setProgress(heroe.getSalud());
-        saludHeroeCombate.setText(heroe.getSalud() + "/" + heroe.getSaludMaxima());
-        barraManaHeroe.setMax(100);
-        barraManaHeroe.setProgress(100);
-        manaHeroeCombate.setText(barraSaludHeroe.getProgress() + "/" + barraSaludHeroe.getMax());
+        cargarDatos = new CargarDatos();
+        heroe = (Heroe) getIntent().getSerializableExtra("heroe");
+        cargarMenuHeroe();
+        Glide.with(this).load(heroe.getImagenCombate()).into(imagenHeroeCombate);
 
-        enemigo = new Personaje("Poring", 100, 100, 10, 10, 5);
-        barraSaludEnemigo.setMax(enemigo.getSaludMaxima());
-        barraSaludEnemigo.setProgress(enemigo.getSalud());
-        saludEnemigoCombate.setText(enemigo.getSalud() + "/" + enemigo.getSaludMaxima());
-        barraManaEnemigo.setMax(100);
-        barraManaEnemigo.setProgress(100);
-        manaEnemigoCombate.setText(barraSaludEnemigo.getProgress() + "/" + barraSaludEnemigo.getMax());
+
+        seleccionEnemigo = (int) getIntent().getSerializableExtra("seleccionEnemigo");
+        enemigo = encontrarEnemigo(seleccionEnemigo);
+        Glide.with(this).load(enemigo.getImagenCombate()).into(imagenEnemigoCombate);
+
+        modificarBarrasSaludMana();
     }
 
     public void comandoAtacar(View view) {
         logsLines.add(heroe.atacarObjetivo(enemigo));
-        barraSaludEnemigo.setProgress(enemigo.getSalud());
-        saludEnemigoCombate.setText(enemigo.getSalud()+"/"+enemigo.getSaludMaxima());
-        adapterLog.notifyDataSetChanged();
+        modificarBarrasSaludMana();
     }
 
     public void comandoDefender(View view) {
@@ -105,22 +107,130 @@ public class ActivityCombate extends AppCompatActivity {
         saludEnemigoCombate.setText(barraSaludEnemigo.getProgress()+"/"+barraSaludEnemigo.getMax());
         logsLines.add("Recibe 20");
         adapterLog.notifyDataSetChanged();
+        imagenEnemigoCombate.setImageResource(enemigo.getImagenMuerte());
     }
 
     public void comandoHabilidades(View view) {
+        botonHabilidad1.setEnabled(true);
+        botonHabilidad2.setEnabled(true);
+        botonHabilidad3.setEnabled(true);
         cajaBotonesHabilidades.setVisibility(View.VISIBLE);
         cajaBotonesPrincipales.setVisibility(View.GONE);
+        if (heroe.getMana() < heroe.getHabilidadesArray().get(0).getCoste()){
+            botonHabilidad1.setEnabled(false);
+        }
+        if(heroe.getMana() < heroe.getHabilidadesArray().get(1).getCoste()){
+            botonHabilidad2.setEnabled(false);
+        }
+        if(heroe.getMana() < heroe.getHabilidadesArray().get(2).getCoste()){
+            botonHabilidad3.setEnabled(false);
+        }
+    }
+
+    public void lanzarHabilidad1(View view) {
+        logsLines.add(heroe.lanzarHechizo(enemigo,0));
+        modificarBarrasSaludMana();
+        reiniciarMenu();
+    }
+
+    public void lanzarHabilidad2(View view) {
+        logsLines.add(heroe.lanzarHechizo(enemigo,1));
+        modificarBarrasSaludMana();
+        reiniciarMenu();
+    }
+
+    public void lanzarHabilidad3(View view) {
+        intent = new Intent(this, ActivityPrincipal.class);
+        intent.putExtra("heroe", heroe);
+        startActivity(intent);
+        finish();
     }
 
     public void comandoObjetos(View view) {
+        botonObjeto1.setEnabled(true);
+        botonObjeto2.setEnabled(true);
+        botonObjeto3.setEnabled(true);
         cajaBotonesObjetos.setVisibility(View.VISIBLE);
         cajaBotonesPrincipales.setVisibility(View.GONE);
+        if (heroe.getObjetosArray().get(0).getCantidad() == 0){
+            botonObjeto1.setEnabled(false);
+        }
+        if (heroe.getObjetosArray().get(1).getCantidad() == 0){
+            botonObjeto2.setEnabled(false);
+        }
+        if (heroe.getObjetosArray().get(2).getCantidad() == 0){
+            botonObjeto3.setEnabled(false);
+        }
     }
 
     public void comandoVolver(View view) {
+        reiniciarMenu();
+    }
+
+    public Enemigo encontrarEnemigo(int Seleccion){
+        if (Seleccion == 0){
+            enemigo = cargarDatos.cargarPoring();
+        }else if(Seleccion == 1){
+            enemigo = cargarDatos.cargarNigromante();
+        }else if(Seleccion == 2){
+            enemigo = cargarDatos.cargarGolem();
+        }else if(Seleccion == 3){
+            enemigo = cargarDatos.cargarGoblin();
+        }else if(Seleccion == 4){
+            enemigo = cargarDatos.cargarDeviling();
+        }else if(Seleccion == 5){
+            enemigo = cargarDatos.cargarPulpoi();
+        }
+        return enemigo;
+    }
+
+    public void modificarBarrasSaludMana(){
+        barraSaludHeroe.setMax(heroe.getSaludMaxima());
+        barraSaludHeroe.setProgress(heroe.getSalud());
+        saludHeroeCombate.setText(heroe.getSalud() + "/" + heroe.getSaludMaxima());
+        barraManaHeroe.setMax(heroe.getManaMaximo());
+        barraManaHeroe.setProgress(heroe.getMana());
+        manaHeroeCombate.setText(heroe.getMana() + "/" + heroe.getManaMaximo());
+        barraSaludEnemigo.setMax(enemigo.getSaludMaxima());
+        barraSaludEnemigo.setProgress(enemigo.getSalud());
+        saludEnemigoCombate.setText(enemigo.getSalud() + "/" + enemigo.getSaludMaxima());
+        barraManaEnemigo.setMax(enemigo.getManaMaximo());
+        barraManaEnemigo.setProgress(enemigo.getMana());
+        manaEnemigoCombate.setText(enemigo.getMana()+ "/" + enemigo.getManaMaximo());
+        adapterLog.notifyDataSetChanged();
+    }
+
+    public void reiniciarMenu(){
         cajaBotonesPrincipales.setVisibility(View.VISIBLE);
         cajaBotonesHabilidades.setVisibility(View.GONE);
         cajaBotonesObjetos.setVisibility(View.GONE);
     }
 
+    public void cargarMenuHeroe(){
+        botonHabilidad1.setText(heroe.getHabilidadesArray().get(0).getNombre() + " \n "
+                + "Daño: " + heroe.getHabilidadesArray().get(0).getPoder() * heroe.getMagia() + "\n"
+                + "Coste: " + heroe.getHabilidadesArray().get(0).getCoste() + " PM");
+        botonHabilidad2.setText(heroe.getHabilidadesArray().get(1).getNombre() + " \n "
+                + "Daño: " + heroe.getHabilidadesArray().get(1).getPoder() * heroe.getMagia() + "\n"
+                + "Coste: " + heroe.getHabilidadesArray().get(1).getCoste() + " PM");
+        botonHabilidad3.setText(heroe.getHabilidadesArray().get(2).getNombre() + " \n "
+                + "+" + heroe.getHabilidadesArray().get(2).getPoder() * heroe.getMagia() + " Salud\n"
+                + "Coste: " + heroe.getHabilidadesArray().get(2).getCoste() + " PM");
+
+        botonObjeto1.setText(heroe.getObjetosArray().get(0).getNombre() + "\n"
+                + "Daño: " + heroe.getObjetosArray().get(0).getPoder() + " \n"
+                + "Cantidad: " + heroe.getObjetosArray().get(0).getCantidad());
+
+        botonObjeto2.setText(heroe.getObjetosArray().get(1).getNombre() + "\n"
+                + "Daño: " + heroe.getObjetosArray().get(1).getPoder() + " \n"
+                + "Cantidad: " + heroe.getObjetosArray().get(1).getCantidad());
+
+        botonObjeto3.setText(heroe.getObjetosArray().get(2).getNombre() + "\n"
+                + "+" + heroe.getObjetosArray().get(2).getPoder() + " Mana\n"
+                + "Cantidad: " + heroe.getObjetosArray().get(2).getCantidad());
+    }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

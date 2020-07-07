@@ -5,4 +5,15 @@
     <string name="habilidades">Habilidades</string>
     <string name="objetos">Objetos</string>
     <string name="volver">Volver</string>
+    <string name="nuevaPartida">Nueva Partida</string>
+    <string name="continuar">Continuar</string>
+    <string name="galeria">Galeria</string>
+    <string name="salir">Salir</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
+    <string name="cerrarJuego">¿Quieres cerrar el juego?</string>
+    <string name="irAMenuPrincipal">¿Quieres salir al menú principal?</string>
+    <string name="guardarPartida">Guardar Partida</string>
+    <string name="combateAleatorio">Combate Aleatorio</string>
+    <string name="areaDeDescanso">Area de Descanso</string>
 </resources>

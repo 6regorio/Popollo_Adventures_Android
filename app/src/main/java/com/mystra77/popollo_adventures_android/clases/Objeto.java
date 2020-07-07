@@ -1,19 +1,20 @@
 package com.mystra77.popollo_adventures_android.clases;
 
-
 import java.io.Serializable;
 
-public class Habilidad implements Serializable {
+public class Objeto implements Serializable {
     private String nombre;
     private int poder;
-    private int coste;
+    private int cantidad;
     private Boolean ofensivo;
+    private int precio;
 
-    public Habilidad(String nombre, int poder, int coste, Boolean ofensivo) {
+    public Objeto(String nombre, int poder, int cantidad, Boolean ofensivo, int precio) {
         this.nombre = nombre;
         this.poder = poder;
-        this.coste = coste;
+        this.cantidad = cantidad;
         this.ofensivo = ofensivo;
+        this.precio = precio;
     }
 
     public String getNombre() {
@@ -32,12 +33,12 @@ public class Habilidad implements Serializable {
         this.poder = poder;
     }
 
-    public int getCoste() {
-        return coste;
+    public int getCantidad() {
+        return cantidad;
     }
 
-    public void setCoste(int coste) {
-        this.coste = coste;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public Boolean getOfensivo() {
@@ -45,10 +46,18 @@ public class Habilidad implements Serializable {
     }
 
     /**
-     * True = habilidad ofensiva - False = habilidad curativa
+     * True = objeto ofensivo - False = objeto curativo
      * @param ofensivo
      */
     public void setOfensivo(Boolean ofensivo) {
         this.ofensivo = ofensivo;
+    }
+
+    public int getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(int precio) {
+        this.precio = precio;
     }
 }
