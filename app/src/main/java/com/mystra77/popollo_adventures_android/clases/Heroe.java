@@ -52,4 +52,21 @@ public class Heroe extends Personaje implements Serializable {
     public void setExplorar(int explorar) {
         this.explorar = explorar;
     }
+
+    public String lanzarObjeto(Personaje objetivo, int numeroObjeto){
+        String resultado;
+        int efecto = objetosArray.get(numeroObjeto).getPoder();
+        objetosArray.get(numeroObjeto).setCantidad(objetosArray.get(numeroObjeto).getCantidad() - 1);
+        if(objetosArray.get(numeroObjeto).getOfensivo()){
+            objetivo.setSalud(objetivo.getSalud() - efecto);
+            return resultado = objetivo.getNombre() + " recibe " + efecto + " puntos de daño.";
+        }else{
+            setMana(getMana() + efecto);
+            if (getMana() > getManaMaximo()){
+                setMana(getManaMaximo());
+            }
+            return resultado = getNombre() + " restablece " + efecto + " puntos de mana.";
+        }
+
+    }
 }

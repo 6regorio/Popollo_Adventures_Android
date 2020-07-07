@@ -24,7 +24,7 @@ public class CargarDatos {
         ArrayList<Objeto> objetosHeroe = new ArrayList<Objeto>();
         objetosHeroe.add(new Objeto("Estrella Ninja", 25, 2, true, 150));
         objetosHeroe.add(new Objeto("Barril Explosivo", 60, 1, true, 400));
-        objetosHeroe.add(new Objeto("Pocion de Mana", 30, 2, true, 250));
+        objetosHeroe.add(new Objeto("Pocion de Mana", 30, 2, false, 250));
         //Atributos Heroe
         Heroe heroe = new Heroe("Popollo", 500, 1, 0, 0,
                 0, 30, 30, 20, 20, 10,

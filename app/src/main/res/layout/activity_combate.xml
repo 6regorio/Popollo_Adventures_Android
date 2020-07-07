@@ -195,14 +195,6 @@
                 android:text="@string/atacar" />
 
             <Button
-                android:id="@+id/btnDefender"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:onClick="comandoDefender"
-                android:text="@string/defender" />
-
-            <Button
                 android:id="@+id/btnHabilidades"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -233,24 +225,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="lanzarHabilidad1"
-                android:text="H1" />
+                android:onClick="lanzarHabilidad1" />
 
             <Button
                 android:id="@+id/btnHabilidad2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="lanzarHabilidad2"
-                android:text="H2" />
+                android:onClick="lanzarHabilidad2" />
 
             <Button
                 android:id="@+id/btnHabilidad3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="lanzarHabilidad3"
-                android:text="H3" />
+                android:onClick="lanzarHabilidad3" />
 
             <Button
                 android:id="@+id/btnVolverHabilidades"
@@ -274,7 +263,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="O1"
+                android:onClick="lanzarObjecto1"
                 android:visibility="visible" />
 
             <Button
@@ -282,7 +271,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="O2"
+                android:onClick="lanzarObjecto2"
                 android:visibility="visible" />
 
             <Button
@@ -290,7 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="O3"
+                android:onClick="lanzarObjecto3"
                 android:visibility="visible" />
 
             <Button

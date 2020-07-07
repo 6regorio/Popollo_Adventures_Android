@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +22,7 @@ import com.mystra77.popollo_adventures_android.clases.Heroe;
 import com.mystra77.popollo_adventures_android.datos.CargarDatos;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ActivityCombate extends AppCompatActivity {
     private ImageView imagenHeroeCombate, imagenEnemigoCombate;
@@ -29,15 +31,17 @@ public class ActivityCombate extends AppCompatActivity {
     private ListView combatLog;
     private ArrayAdapter<String> adapterLog;
     private ArrayList<String> logsLines;
-    private Button botonAtaque, botonDefensa, botonHabilidad, botonObjeto, botonHabilidad1,
-            botonHabilidad2, botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3,
-            botonVolverHabilidades, botonVolverObjetos;
+    private Button botonAtaque, botonHabilidad, botonObjeto, botonHabilidad1, botonHabilidad2,
+            botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3, botonVolverHabilidades,
+            botonVolverObjetos;
     private LinearLayout cajaBotonesPrincipales, cajaBotonesHabilidades, cajaBotonesObjetos;
     private Heroe heroe;
     private Enemigo enemigo;
     private Intent intent;
     private int seleccionEnemigo;
     private CargarDatos cargarDatos;
+    private Handler handler;
+    private boolean turnoHeroe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,6 @@ public class ActivityCombate extends AppCompatActivity {
         cajaBotonesObjetos = findViewById(R.id.LinearLayoutObjetos);
 
         botonAtaque = findViewById(R.id.btnAtacar);
-        botonDefensa = findViewById(R.id.btnDefender);
         botonHabilidad = findViewById(R.id.btnHabilidades);
         botonObjeto = findViewById(R.id.btnObjetos);
         botonHabilidad1 = findViewById(R.id.btnHabilidad1);
@@ -86,7 +89,8 @@ public class ActivityCombate extends AppCompatActivity {
 
         cargarDatos = new CargarDatos();
         heroe = (Heroe) getIntent().getSerializableExtra("heroe");
-        cargarMenuHeroe();
+        cargarMenuHeroeHabilidades();
+        cargarMenuHeroeObjetos();
         Glide.with(this).load(heroe.getImagenCombate()).into(imagenHeroeCombate);
 
 
@@ -95,19 +99,21 @@ public class ActivityCombate extends AppCompatActivity {
         Glide.with(this).load(enemigo.getImagenCombate()).into(imagenEnemigoCombate);
 
         modificarBarrasSaludMana();
+        handler = new Handler();
+        turnoHeroe = true;
     }
 
     public void comandoAtacar(View view) {
         logsLines.add(heroe.atacarObjetivo(enemigo));
+        turnoHeroe = false;
         modificarBarrasSaludMana();
-    }
-
-    public void comandoDefender(View view) {
-        barraSaludEnemigo.setProgress(barraSaludEnemigo.getProgress() - 20);
-        saludEnemigoCombate.setText(barraSaludEnemigo.getProgress()+"/"+barraSaludEnemigo.getMax());
-        logsLines.add("Recibe 20");
-        adapterLog.notifyDataSetChanged();
-        imagenEnemigoCombate.setImageResource(enemigo.getImagenMuerte());
+        condicionVictoriaDerrota();
+        /**
+         * intent = new Intent(this, ActivityPrincipal.class);
+         *         intent.putExtra("heroe", heroe);
+         *         startActivity(intent);
+         *         finish();
+         */
     }
 
     public void comandoHabilidades(View view) {
@@ -129,21 +135,26 @@ public class ActivityCombate extends AppCompatActivity {
 
     public void lanzarHabilidad1(View view) {
         logsLines.add(heroe.lanzarHechizo(enemigo,0));
+        turnoHeroe = false;
         modificarBarrasSaludMana();
         reiniciarMenu();
+        condicionVictoriaDerrota();
     }
 
     public void lanzarHabilidad2(View view) {
         logsLines.add(heroe.lanzarHechizo(enemigo,1));
+        turnoHeroe = false;
         modificarBarrasSaludMana();
         reiniciarMenu();
+        condicionVictoriaDerrota();
     }
 
     public void lanzarHabilidad3(View view) {
-        intent = new Intent(this, ActivityPrincipal.class);
-        intent.putExtra("heroe", heroe);
-        startActivity(intent);
-        finish();
+        logsLines.add(heroe.lanzarHechizo(enemigo,2));
+        turnoHeroe = false;
+        modificarBarrasSaludMana();
+        reiniciarMenu();
+        condicionVictoriaDerrota();
     }
 
     public void comandoObjetos(View view) {
@@ -161,6 +172,33 @@ public class ActivityCombate extends AppCompatActivity {
         if (heroe.getObjetosArray().get(2).getCantidad() == 0){
             botonObjeto3.setEnabled(false);
         }
+    }
+
+    public void lanzarObjecto1(View view) {
+        logsLines.add(heroe.lanzarObjeto(enemigo, 0));
+        turnoHeroe = false;
+        modificarBarrasSaludMana();
+        cargarMenuHeroeObjetos();
+        reiniciarMenu();
+        condicionVictoriaDerrota();
+    }
+
+    public void lanzarObjecto2(View view) {
+        logsLines.add(heroe.lanzarObjeto(enemigo, 1));
+        turnoHeroe = false;
+        modificarBarrasSaludMana();
+        cargarMenuHeroeObjetos();
+        reiniciarMenu();
+        condicionVictoriaDerrota();
+    }
+
+    public void lanzarObjecto3(View view) {
+        logsLines.add(heroe.lanzarObjeto(enemigo, 2));
+        turnoHeroe = false;
+        modificarBarrasSaludMana();
+        cargarMenuHeroeObjetos();
+        reiniciarMenu();
+        condicionVictoriaDerrota();
     }
 
     public void comandoVolver(View view) {
@@ -206,7 +244,7 @@ public class ActivityCombate extends AppCompatActivity {
         cajaBotonesObjetos.setVisibility(View.GONE);
     }
 
-    public void cargarMenuHeroe(){
+    public void cargarMenuHeroeHabilidades(){
         botonHabilidad1.setText(heroe.getHabilidadesArray().get(0).getNombre() + " \n "
                 + "Daño: " + heroe.getHabilidadesArray().get(0).getPoder() * heroe.getMagia() + "\n"
                 + "Coste: " + heroe.getHabilidadesArray().get(0).getCoste() + " PM");
@@ -216,7 +254,9 @@ public class ActivityCombate extends AppCompatActivity {
         botonHabilidad3.setText(heroe.getHabilidadesArray().get(2).getNombre() + " \n "
                 + "+" + heroe.getHabilidadesArray().get(2).getPoder() * heroe.getMagia() + " Salud\n"
                 + "Coste: " + heroe.getHabilidadesArray().get(2).getCoste() + " PM");
+    }
 
+    public void cargarMenuHeroeObjetos(){
         botonObjeto1.setText(heroe.getObjetosArray().get(0).getNombre() + "\n"
                 + "Daño: " + heroe.getObjetosArray().get(0).getPoder() + " \n"
                 + "Cantidad: " + heroe.getObjetosArray().get(0).getCantidad());
@@ -230,7 +270,68 @@ public class ActivityCombate extends AppCompatActivity {
                 + "Cantidad: " + heroe.getObjetosArray().get(2).getCantidad());
     }
 
+    public String turnoEnemigo(){
+        String resultado = "";
+        final int numeroAleatorio = new Random().nextInt(2);
+        desactivarMenu();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (numeroAleatorio == 0){
+                    logsLines.add(enemigo.atacarObjetivo(heroe));
+                }if(numeroAleatorio == 1){
+                    int numeroHabilidad = new Random().nextInt(2);
+                    if (numeroHabilidad == 0) {
+                        if (enemigo.getMana() >= enemigo.getHabilidadesArray().get(0).getCoste()) {
+                            logsLines.add(enemigo.lanzarHechizo(heroe, 0));
+                        } else {
+                            logsLines.add(enemigo.getNombre() + " pierde la concentracion.");
+                        }
+                    } else if(numeroHabilidad == 1) {
+                        if (enemigo.getMana() >= enemigo.getHabilidadesArray().get(1).getCoste()) {
+                            logsLines.add(enemigo.lanzarHechizo(heroe, 1));
+                        } else {
+                            logsLines.add(enemigo.getNombre() + " pierde la concentracion.");
+                        }
+                    }
+                }
+                turnoHeroe = true;
+                modificarBarrasSaludMana();
+                activarMenu();
+                condicionVictoriaDerrota();
+            }
+        }, 2500);
+        return resultado;
+    }
+
+    public void desactivarMenu(){
+        botonAtaque.setEnabled(false);
+        botonHabilidad.setEnabled(false);
+        botonObjeto.setEnabled(false);
+    }
+
+    public void activarMenu(){
+        botonAtaque.setEnabled(true);
+        botonHabilidad.setEnabled(true);
+        botonObjeto.setEnabled(true);
+    }
+
+    public void condicionVictoriaDerrota(){
+        if(heroe.getSalud()<=0){
+            imagenHeroeCombate.setImageResource(heroe.getImagenMuerte());
+            desactivarMenu();
+        }else if(enemigo.getSalud()<=0){
+            imagenEnemigoCombate.setImageResource(enemigo.getImagenMuerte());
+            desactivarMenu();
+        }else{
+            if(turnoHeroe == false){
+                turnoEnemigo();
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
     }
+
+
 }

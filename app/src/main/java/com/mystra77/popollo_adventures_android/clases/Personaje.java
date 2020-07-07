@@ -195,10 +195,18 @@ public class Personaje implements Serializable {
 
     public String lanzarHechizo(Personaje objetivo, int numeroHabilidad){
         String resultado;
-        int dañoRealizado = habilidadesArray.get(numeroHabilidad).getPoder() * magia;
-        objetivo.setSalud(objetivo.salud - dañoRealizado);
-        mana = mana - habilidadesArray.get(numeroHabilidad).getCoste();
-        return resultado = objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
+        int efecto = habilidadesArray.get(numeroHabilidad).getPoder() * magia;
+        setMana(getMana() - habilidadesArray.get(numeroHabilidad).getCoste());
+        if (habilidadesArray.get(numeroHabilidad).getOfensivo()){
+            objetivo.setSalud(objetivo.salud - efecto);
+            return resultado = objetivo.nombre + " recibe " + efecto + " puntos de daño.";
+        }else{
+            setSalud(getSalud() + efecto);
+            if (getSalud() > getSaludMaxima()){
+                setSalud(getSaludMaxima());
+            }
+            return resultado = nombre + " restablece " + efecto + " puntos de salud.";
+        }
     }
 
 }
