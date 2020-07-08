@@ -1,8 +1,10 @@
 package com.mystra77.popollo_adventures_android;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -26,22 +28,25 @@ import java.util.Random;
 
 public class ActivityCombate extends AppCompatActivity {
     private ImageView imagenHeroeCombate, imagenEnemigoCombate;
-    private TextView saludHeroeCombate, manaHeroeCombate, saludEnemigoCombate, manaEnemigoCombate;
+    private TextView saludHeroeCombate, manaHeroeCombate, saludEnemigoCombate, manaEnemigoCombate,
+            textoVictoriaDerrota, textoAtributosHeroe, textoAtributosEnemigo;
     private ProgressBar barraSaludHeroe, barraManaHeroe, barraSaludEnemigo, barraManaEnemigo;
     private ListView combatLog;
     private ArrayAdapter<String> adapterLog;
     private ArrayList<String> logsLines;
     private Button botonAtaque, botonHabilidad, botonObjeto, botonHabilidad1, botonHabilidad2,
-            botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3, botonVolverHabilidades,
-            botonVolverObjetos;
+            botonHabilidad3, botonObjeto1, botonObjeto2, botonObjeto3, botonVictoria, botonDerrota;
+    private ConstraintLayout cajaVictoriaDerrota;
     private LinearLayout cajaBotonesPrincipales, cajaBotonesHabilidades, cajaBotonesObjetos;
     private Heroe heroe;
     private Enemigo enemigo;
     private Intent intent;
-    private int seleccionEnemigo;
+    private int seleccionEnemigo, lengthMusic;
     private CargarDatos cargarDatos;
     private Handler handler;
-    private boolean turnoHeroe;
+    private boolean turnoHeroe, activarInfoHeroe, activarInfoEnemigo;
+    private MediaPlayer musicaFondo;
+    private MediaPlayer sonidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class ActivityCombate extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_combate);
 
+        cajaVictoriaDerrota = findViewById(R.id.layoutVictoriaDerrota);
         cajaBotonesPrincipales = findViewById(R.id.LinearLayoutBotonesPrincipales);
         cajaBotonesHabilidades = findViewById(R.id.LinearLayoutHabilidades);
         cajaBotonesObjetos = findViewById(R.id.LinearLayoutObjetos);
@@ -63,11 +69,11 @@ public class ActivityCombate extends AppCompatActivity {
         botonHabilidad1 = findViewById(R.id.btnHabilidad1);
         botonHabilidad2 = findViewById(R.id.btnHabilidad2);
         botonHabilidad3 = findViewById(R.id.btnHabilidad3);
-        botonVolverHabilidades = findViewById(R.id.btnVolverHabilidades);
         botonObjeto1 = findViewById(R.id.btnObjeto1);
         botonObjeto2 = findViewById(R.id.btnObjeto2);
         botonObjeto3 = findViewById(R.id.btnObjeto3);
-        botonVolverObjetos = findViewById(R.id.btnVolverObjetos);
+        botonVictoria = findViewById(R.id.btnVictoria);
+        botonDerrota = findViewById(R.id.btnDerrota);
 
         imagenHeroeCombate = findViewById(R.id.imagenHeroe);
         imagenEnemigoCombate = findViewById(R.id.imagenEnemigo);
@@ -79,13 +85,15 @@ public class ActivityCombate extends AppCompatActivity {
         manaEnemigoCombate = findViewById(R.id.textViewManaEnemigo);
         barraSaludEnemigo = findViewById(R.id.progressBarSaludEnemigo);
         barraManaEnemigo = findViewById(R.id.progressBarManaEnemigo);
+        textoVictoriaDerrota = findViewById(R.id.textViewVictoriaDerrota);
+        textoAtributosHeroe = findViewById(R.id.textViewAtributosHeroe);
+        textoAtributosEnemigo = findViewById(R.id.textViewAtributosEnemigo);
 
         combatLog = findViewById(R.id.listViewCombatLog);
         logsLines = new ArrayList<String>();
         adapterLog = new ArrayAdapter<String>(this, R.layout.log_adapter, logsLines);
         combatLog.setAdapter(adapterLog);
         combatLog.setEnabled(false);
-
 
         cargarDatos = new CargarDatos();
         heroe = (Heroe) getIntent().getSerializableExtra("heroe");
@@ -101,19 +109,44 @@ public class ActivityCombate extends AppCompatActivity {
         modificarBarrasSaludMana();
         handler = new Handler();
         turnoHeroe = true;
+        activarInfoHeroe = true;
+        activarInfoEnemigo = true;
+
+        textoAtributosHeroe.setText("Fuerza: " + heroe.getFuerza()+"\n" +
+                "Magia: " + heroe.getMagia() +"\n" +
+                "Defensa: " + heroe.getDefensa() +"\n" +
+                "Agilidad: " + heroe.getAgilidad());
+
+        textoAtributosEnemigo.setText("Fuerza: " + enemigo.getFuerza()+"\n" +
+                "Magia: " + enemigo.getMagia() +"\n" +
+                "Defensa: " + enemigo.getDefensa() +"\n" +
+                "Agilidad: " + enemigo.getAgilidad());
+
+        musicaFondo = MediaPlayer.create(this, R.raw.fondo_combate);
+        musicaFondo.setVolume(0.4f,0.4f);
+        musicaFondo.setLooping(true);
+        musicaFondo.start();
+        sonidos = MediaPlayer.create(this,R.raw.sonido_ataque);
     }
+
 
     public void comandoAtacar(View view) {
         logsLines.add(heroe.atacarObjetivo(enemigo));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoAtacar();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         condicionVictoriaDerrota();
-        /**
-         * intent = new Intent(this, ActivityPrincipal.class);
-         *         intent.putExtra("heroe", heroe);
-         *         startActivity(intent);
-         *         finish();
-         */
+    }
+
+    public void sonidoAtacar(){
+        sonidos.release();
+        sonidos = MediaPlayer.create(this, R.raw.sonido_ataque);
+        sonidos.setVolume(0.5f,0.5f);
+        sonidos.start();
     }
 
     public void comandoHabilidades(View view) {
@@ -136,6 +169,11 @@ public class ActivityCombate extends AppCompatActivity {
     public void lanzarHabilidad1(View view) {
         logsLines.add(heroe.lanzarHechizo(enemigo,0));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoExplosion();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         reiniciarMenu();
         condicionVictoriaDerrota();
@@ -144,6 +182,11 @@ public class ActivityCombate extends AppCompatActivity {
     public void lanzarHabilidad2(View view) {
         logsLines.add(heroe.lanzarHechizo(enemigo,1));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoExplosion();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         reiniciarMenu();
         condicionVictoriaDerrota();
@@ -152,11 +195,27 @@ public class ActivityCombate extends AppCompatActivity {
     public void lanzarHabilidad3(View view) {
         logsLines.add(heroe.lanzarHechizo(enemigo,2));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoCuracion();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         reiniciarMenu();
         condicionVictoriaDerrota();
     }
 
+    public void sonidoExplosion(){
+        sonidos.release();
+        sonidos = MediaPlayer.create(this, R.raw.sonido_explosion);
+        sonidos.start();
+    }
+
+    public void sonidoCuracion(){
+        sonidos.release();
+        sonidos = MediaPlayer.create(this, R.raw.sonido_curacion);
+        sonidos.start();
+    }
     public void comandoObjetos(View view) {
         botonObjeto1.setEnabled(true);
         botonObjeto2.setEnabled(true);
@@ -177,6 +236,11 @@ public class ActivityCombate extends AppCompatActivity {
     public void lanzarObjecto1(View view) {
         logsLines.add(heroe.lanzarObjeto(enemigo, 0));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoExplosion();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         cargarMenuHeroeObjetos();
         reiniciarMenu();
@@ -186,6 +250,11 @@ public class ActivityCombate extends AppCompatActivity {
     public void lanzarObjecto2(View view) {
         logsLines.add(heroe.lanzarObjeto(enemigo, 1));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoExplosion();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         cargarMenuHeroeObjetos();
         reiniciarMenu();
@@ -195,6 +264,11 @@ public class ActivityCombate extends AppCompatActivity {
     public void lanzarObjecto3(View view) {
         logsLines.add(heroe.lanzarObjeto(enemigo, 2));
         turnoHeroe = false;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                sonidoCuracion();
+            }
+        }, 100);
         modificarBarrasSaludMana();
         cargarMenuHeroeObjetos();
         reiniciarMenu();
@@ -278,17 +352,20 @@ public class ActivityCombate extends AppCompatActivity {
             public void run() {
                 if (numeroAleatorio == 0){
                     logsLines.add(enemigo.atacarObjetivo(heroe));
+                    sonidoAtacar();
                 }if(numeroAleatorio == 1){
                     int numeroHabilidad = new Random().nextInt(2);
                     if (numeroHabilidad == 0) {
                         if (enemigo.getMana() >= enemigo.getHabilidadesArray().get(0).getCoste()) {
                             logsLines.add(enemigo.lanzarHechizo(heroe, 0));
+                            sonidoExplosion();
                         } else {
                             logsLines.add(enemigo.getNombre() + " pierde la concentracion.");
                         }
                     } else if(numeroHabilidad == 1) {
                         if (enemigo.getMana() >= enemigo.getHabilidadesArray().get(1).getCoste()) {
                             logsLines.add(enemigo.lanzarHechizo(heroe, 1));
+                            sonidoExplosion();
                         } else {
                             logsLines.add(enemigo.getNombre() + " pierde la concentracion.");
                         }
@@ -299,7 +376,7 @@ public class ActivityCombate extends AppCompatActivity {
                 activarMenu();
                 condicionVictoriaDerrota();
             }
-        }, 2500);
+        }, 2000);
         return resultado;
     }
 
@@ -315,13 +392,44 @@ public class ActivityCombate extends AppCompatActivity {
         botonObjeto.setEnabled(true);
     }
 
-    public void condicionVictoriaDerrota(){
-        if(heroe.getSalud()<=0){
-            imagenHeroeCombate.setImageResource(heroe.getImagenMuerte());
-            desactivarMenu();
-        }else if(enemigo.getSalud()<=0){
+    public void condicionVictoriaDerrota() {
+        if (enemigo.getSalud() <= 0) {
+            musicaFondo.release();
+            musicaFondo = MediaPlayer.create(this, R.raw.sonido_victoria);
+            musicaFondo.setVolume(0.6f, 0.6f);
+            musicaFondo.start();
+            String resultado = "¡VICTORIA!\n\n" +
+                    "** Recoges " + enemigo.getDinero() + " monedas de oro **\n" +
+                    "** Recibes " + enemigo.getExperiencia() + " puntos de experiencia **\n";
+            resultado += heroe.subirNivel(enemigo.getExperiencia());
+            heroe.setDinero(heroe.getDinero() + enemigo.getDinero());
+            textoVictoriaDerrota.setText(resultado);
             imagenEnemigoCombate.setImageResource(enemigo.getImagenMuerte());
             desactivarMenu();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    cajaBotonesPrincipales.setVisibility(View.INVISIBLE);
+                    combatLog.setVisibility(View.INVISIBLE);
+                    cajaVictoriaDerrota.setVisibility(View.VISIBLE);
+                    botonVictoria.setVisibility(View.VISIBLE);
+                }
+            }, 1000);
+        }else if(heroe.getSalud()<=0){
+            musicaFondo.release();
+            musicaFondo = MediaPlayer.create(this, R.raw.sonido_derrota);
+            musicaFondo.setVolume(0.6f, 0.6f);
+            musicaFondo.start();
+            imagenHeroeCombate.setImageResource(heroe.getImagenMuerte());
+            desactivarMenu();
+            textoVictoriaDerrota.setText("¡DERROTA!\n\n" + " Esfuérzate más la próxima vez OwO\n");
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    cajaBotonesPrincipales.setVisibility(View.INVISIBLE);
+                    combatLog.setVisibility(View.INVISIBLE);
+                    cajaVictoriaDerrota.setVisibility(View.VISIBLE);
+                    botonDerrota.setVisibility(View.VISIBLE);
+                }
+            }, 1000);
         }else{
             if(turnoHeroe == false){
                 turnoEnemigo();
@@ -329,9 +437,70 @@ public class ActivityCombate extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    public void victoria(View view){
+        intent = new Intent(this, ActivityPrincipal.class);
+        intent.putExtra("heroe", heroe);
+        startActivity(intent);
+        finish();
+
+    }
+
+    public void derrota(View view){
+        intent = new Intent(this, MainActivity.class);
+        intent.removeExtra("heroe");
+        startActivity(intent);
+        finish();
+    }
+
+    public void mostrarInformacionHeroe(View view) {
+        if (activarInfoHeroe){
+            textoAtributosHeroe.setVisibility(View.VISIBLE);
+            activarInfoHeroe = false;
+        }else{
+            textoAtributosHeroe.setVisibility(View.INVISIBLE);
+            activarInfoHeroe = true;
+        }
     }
 
 
+    public void mostrarInformacionEnemigo(View view) {
+        if (activarInfoEnemigo){
+            textoAtributosEnemigo.setVisibility(View.VISIBLE);
+            activarInfoEnemigo = false;
+        }else{
+            textoAtributosEnemigo.setVisibility(View.INVISIBLE);
+            activarInfoEnemigo = true;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        musicaFondo.pause();
+        lengthMusic = musicaFondo.getCurrentPosition();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        musicaFondo.seekTo(lengthMusic);
+        musicaFondo.start();
+        musicaFondo.setLooping(true);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        if (musicaFondo != null) {
+            musicaFondo.stop();
+            musicaFondo.release();
+        }
+        if (sonidos != null) {
+            sonidos.stop();
+            sonidos.release();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

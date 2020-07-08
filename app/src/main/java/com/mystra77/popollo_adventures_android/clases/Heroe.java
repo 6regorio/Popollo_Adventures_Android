@@ -67,6 +67,35 @@ public class Heroe extends Personaje implements Serializable {
             }
             return resultado = getNombre() + " restablece " + efecto + " puntos de mana.";
         }
+    }
 
+    /**
+     * Funcion que nos permite subir el nivel del heroe si llega a 30 puntos de experiencia * nivel y muestra todo el
+     *
+     * @param experienciaRecibida Variable de tipo entero que aumenta la experiencia del heroe
+     */
+    public String subirNivel(int experienciaRecibida) {
+        String resultado;
+        setExperiencia(getExperiencia() + experienciaRecibida);
+        if (getExperiencia() >= getNivel() * 30) {
+            setExperiencia(getExperiencia() - getNivel() * 30);
+            if (nivel % 2 == 0) {
+                setManaMaximo(getManaMaximo() + 2);
+                setMana(getMana() + 2);
+                setMagia(getMagia() + 1);
+                setAgilidad(getAgilidad() + 1);
+                setNivel(getNivel() + 1);
+                return resultado = "¡¡¡LEVEL UP!!!";
+            } else {
+                setSaludMaxima(getSaludMaxima() + 10);
+                setSalud(getSalud() + 10);
+                setFuerza(getFuerza() + 2);
+                setDefensa(getDefensa() + 1);
+                setNivel(getNivel() + 1);
+                return resultado = "¡¡¡LEVEL UP!!!";
+            }
+        }else{
+            return resultado="";
+        }
     }
 }

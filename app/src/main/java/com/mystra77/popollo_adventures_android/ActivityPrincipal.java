@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.mystra77.popollo_adventures_android.clases.Heroe;
-import com.mystra77.popollo_adventures_android.clases.Personaje;
 import com.mystra77.popollo_adventures_android.datos.CargarDatos;
 
 import java.util.Random;
@@ -21,6 +21,7 @@ public class ActivityPrincipal extends AppCompatActivity {
     private Heroe heroe;
     private Intent intent;
     private CargarDatos cargarDatos;
+    private TextView textoEstadisticas, textoExperiencia, textoDineroReputacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +32,28 @@ public class ActivityPrincipal extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_principal);
 
+        textoEstadisticas = findViewById(R.id.textViewEstaditicas);
+        textoExperiencia = findViewById(R.id.textViewExperiencia);
+        textoDineroReputacion = findViewById(R.id.textViewOroReputacion);
+
         //Cargando Heroe
         cargarDatos = new CargarDatos();
         heroe = (Heroe) getIntent().getSerializableExtra("heroe");
         if (heroe == null) {
             heroe = cargarDatos.cargarHeroe();
         }
+
+        textoExperiencia.setText("Nivel: " + heroe.getNivel() + "\n" +
+                heroe.getExperiencia() + "/" + (heroe.getNivel() * 30));
+
+        textoEstadisticas.setText("Salud: " + heroe.getSalud() + "/" + heroe.getSaludMaxima() + "\n" +
+                "Mana: " + heroe.getMana() + "/" + heroe.getManaMaximo() + "\n" +
+                "Fuerza: " + heroe.getFuerza() + "\n" +
+                "Magia: " + heroe.getMagia() + "\n" +
+                "Defensa: " + heroe.getDefensa() + "\n" +
+                "Agilidad: " + heroe.getAgilidad());
+
+        textoDineroReputacion.setText("Oro: " + heroe.getDinero() + "\nReputacion: " + heroe.getReputacion());
     }
 
     public void combatir(View view) {
@@ -52,9 +69,9 @@ public class ActivityPrincipal extends AppCompatActivity {
         } else if (heroe.getExplorar() >= 16) {
             aleatorio = new Random().nextInt(5);
         }
-            intent.putExtra("seleccionEnemigo", aleatorio);
-            startActivity(intent);
-            finish();
+        intent.putExtra("seleccionEnemigo", aleatorio);
+        startActivity(intent);
+        finish();
     }
 
     public void salirAlMenu(View view) {

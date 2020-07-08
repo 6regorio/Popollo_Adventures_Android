@@ -180,15 +180,15 @@ public class Personaje implements Serializable {
         //Comprobacion de si el golpe es critico o ha fallado.
         if (critico) {
             objetivo.setSalud(objetivo.salud - dañoRealizado);
-            return resultado = "**GOLPE CRITICO** " + objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
+            return resultado = objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
         } else if (fallo) {
-            return resultado = nombre + " **Falla el ataque**";
+            return resultado = nombre + " falla el ataque.";
         } else {
             if (dañoRealizado > 0) {
                 objetivo.setSalud(objetivo.salud - dañoRealizado);
                 return resultado = objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
             } else {
-                return resultado = objetivo.nombre + " **Bloquea el ataque**";
+                return resultado = objetivo.nombre + " bloquea el ataque.";
             }
         }
     }

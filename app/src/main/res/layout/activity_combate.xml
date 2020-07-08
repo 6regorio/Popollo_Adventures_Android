@@ -40,15 +40,46 @@
                 android:background="@drawable/border_combat_box"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imagenHeroe"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="1"
-                    android:scaleType="centerCrop" />
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imagenHeroe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/textViewAtributosHeroe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/border_victoria_derrota"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:visibility="invisible" />
+
+                    <Button
+                        android:id="@+id/btnInfoHeroe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:onClick="mostrarInformacionHeroe"
+                        android:text="info" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -121,15 +152,46 @@
                 android:background="@drawable/border_combat_box"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imagenEnemigo"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="1"
-                    android:scaleType="centerCrop" />
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imagenEnemigo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/textViewAtributosEnemigo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/border_victoria_derrota"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:visibility="invisible" />
+
+                    <Button
+                        android:id="@+id/btnInfoEnemigo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:onClick="mostrarInformacionEnemigo"
+                        android:text="info" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -291,5 +353,60 @@
                 android:text="@string/volver" />
         </LinearLayout>
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutVictoriaDerrota"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="120dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/log_border"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textViewVictoriaDerrota"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnVictoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="victoria"
+                android:text="@string/continuar"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnDerrota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="derrota"
+                android:text="@string/salir"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

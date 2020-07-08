@@ -16,4 +16,5 @@
     <string name="guardarPartida">Guardar Partida</string>
     <string name="combateAleatorio">Combate Aleatorio</string>
     <string name="areaDeDescanso">Area de Descanso</string>
+    <string name="info">Info</string>
 </resources>
