@@ -17,4 +17,10 @@
     <string name="combateAleatorio">Combate Aleatorio</string>
     <string name="areaDeDescanso">Area de Descanso</string>
     <string name="info">Info</string>
+    <string name="entrarEnTienda">"^^ Entrando en la tienda ^^"</string>
+    <string name="bajoNivel">¡¡¡RETIRADA!!!\nNivel insuficiente </string>
+    <string name="avanzar">¿Quieres avanzar a tu siguiente destino?</string>
+    <string name="ok">OK</string>
+    <string name="primerPaso">¡¡¡FELICIDADES!!!\n^^ Has dado tu primer paso ^^</string>
+    <string name="entrarEnCombate">Entrando en tu proximo combate OwO</string>
 </resources>

@@ -7,15 +7,18 @@
     tools:context=".ActivityPrincipal">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageViewMapa"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clickable="true"
+        android:onClick="avanzarCasilla"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mapa" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textViewOroReputacion"
@@ -26,7 +29,10 @@
         android:padding="10dp"
         android:textAlignment="center"
         android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,7 +52,8 @@
             android:paddingBottom="5dp"
             android:textAlignment="center"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/textViewEstaditicas"
@@ -58,7 +65,8 @@
             android:padding="10dp"
             android:textAlignment="center"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,10 +90,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:onClick="combatir"
+                android:singleLine="true"
                 android:text="@string/combateAleatorio"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btnDescanso"
@@ -95,7 +104,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="@string/areaDeDescanso"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +122,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="@string/guardarPartida"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btnInicio"
@@ -120,11 +131,55 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:onClick="salirAlMenu"
+                android:singleLine="true"
                 android:text="@string/salir"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="visible" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutMensajePrincipal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="40dp"
+        android:background="@drawable/border_victoria_derrota"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textViewMensajePrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSalirMensajePrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="pasarMensaje"
+            android:text="@string/continuar"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnCreditos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="irACreditos"
+            android:text="@string/continuar"
+            android:visibility="gone" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
