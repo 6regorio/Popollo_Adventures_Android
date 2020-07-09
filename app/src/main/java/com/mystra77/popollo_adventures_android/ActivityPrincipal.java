@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -32,6 +33,9 @@ public class ActivityPrincipal extends AppCompatActivity {
     private Button botonPasarMensaje, botonCreditos, botonCombateAleatorio, botonGuardarPartida,
             botonAreaDescanso, botonSalir;
     private Handler handler;
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+    private MediaPlayer sonidoMovimiento, sonidoHuida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,9 @@ public class ActivityPrincipal extends AppCompatActivity {
         botonSalir = findViewById(R.id.btnInicio);
         botonPasarMensaje = findViewById(R.id.btnSalirMensajePrincipal);
         botonCreditos = findViewById(R.id.btnCreditos);
+
+        sonidoMovimiento = MediaPlayer.create(this, R.raw.sonido_mover);
+        sonidoHuida = MediaPlayer.create(this, R.raw.sonido_retirada);
 
         //Cargando Heroe
         cargarDatos = new CargarDatos();
@@ -78,9 +85,8 @@ public class ActivityPrincipal extends AppCompatActivity {
     }
 
     public void combatir(View view) {
+        desactivarBotones();
         int aleatorio = 0;
-        intent = new Intent(this, ActivityCombate.class);
-        intent.putExtra("heroe", heroe);
         if (heroe.getExplorar() >= 5 && heroe.getExplorar() < 9) {
             aleatorio = new Random().nextInt(2);
         } else if (heroe.getExplorar() >= 9 && heroe.getExplorar() < 12) {
@@ -90,18 +96,46 @@ public class ActivityPrincipal extends AppCompatActivity {
         } else if (heroe.getExplorar() >= 16) {
             aleatorio = new Random().nextInt(5);
         }
-        intent.putExtra("seleccionEnemigo", aleatorio);
-        startActivity(intent);
-        finish();
+        showAlert(R.string.entrarEnCombate, 1, aleatorio);
     }
 
-    public void salirAlMenu(View view) {
-        final Intent intent = new Intent(this, MainActivity.class);
+
+    public void irADescanso(View view) {
+        desactivarBotones();
+        //intent = new Intent(this, ActivityCombate.class);
+        //intent.putExtra("heroe", heroe);
+        //startActivity(intent);
+        //finish();
+    }
+
+    public void irAGuardar(View view) {
         new AlertDialog.Builder(this)
-                .setMessage(R.string.irAMenuPrincipal)
+                .setMessage(R.string.guardarPArtida)
+                .setCancelable(false)
                 .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public void salirAlMenu(View view) {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.irAMenuPrincipal)
+                .setCancelable(false)
+                .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(ActivityPrincipal.this, MainActivity.class);
+                        intent.removeExtra("heroe");
                         dialog.dismiss();
                         moveTaskToBack(true);
                         finish();
@@ -131,10 +165,10 @@ public class ActivityPrincipal extends AppCompatActivity {
             botonPasarMensaje.setVisibility(View.VISIBLE);
             cajaMensajePrincipal.setVisibility(View.VISIBLE);
             imagenMapaFondo.setEnabled(false);
-            botonSalir.setVisibility(View.INVISIBLE);
-            botonCombateAleatorio.setVisibility(View.INVISIBLE);
-            botonAreaDescanso.setVisibility(View.INVISIBLE);
-            botonGuardarPartida.setVisibility(View.INVISIBLE);
+            botonSalir.setEnabled(false);
+            botonCombateAleatorio.setEnabled(false);
+            botonAreaDescanso.setEnabled(false);
+            botonGuardarPartida.setEnabled(false);
             textoEstadisticas.setVisibility(View.INVISIBLE);
             textoExperiencia.setVisibility(View.INVISIBLE);
             textoDineroReputacion.setVisibility(View.INVISIBLE);
@@ -193,7 +227,7 @@ public class ActivityPrincipal extends AppCompatActivity {
         if (heroe.getExplorar() == 19) {
             imagenMapaFondo.setImageResource(R.drawable.mapa19);
         }
-        if (heroe.getExplorar() == 20){
+        if (heroe.getExplorar() == 20) {
             imagenMapaFondo.setImageResource(R.drawable.mapa19);
             cajaMensajePrincipal.setVisibility(View.VISIBLE);
             botonCreditos.setVisibility(View.VISIBLE);
@@ -212,79 +246,36 @@ public class ActivityPrincipal extends AppCompatActivity {
     }
 
     public void avanzarCasilla(View view) {
+        sonidoMovimiento.start();
         new AlertDialog.Builder(this)
                 .setMessage(R.string.avanzar)
+                .setCancelable(false)
                 .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
                         dialog.dismiss();
                         heroe.setExplorar(heroe.getExplorar() + 1);
                         if (heroe.getExplorar() == 1) {
+                            botonSalir.setEnabled(true);
                             imagenMapaFondo.setImageResource(R.drawable.mapa1);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this);
-                            builder.setMessage(R.string.primerPaso);
-                            final AlertDialog dialog1 = builder.show();
-                            TextView messageText = (TextView)dialog1.findViewById(android.R.id.message);
-                            messageText.setGravity(Gravity.CENTER);
-                            dialog1.show();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                   dialog1.dismiss();
-                                }
-                            }, 1500);
+                            showAlert(R.string.primerPaso, 0, 0);
                         }
                         if (heroe.getExplorar() == 2) {
-                            showAlert(R.string.entrarEnCombate);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 0);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnCombate, 1, 0);
                         }
                         if (heroe.getExplorar() == 3) {
 
                         }
                         if (heroe.getExplorar() == 4) {
-                            showAlert(R.string.entrarEnTienda);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 0);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 5) {
                             if (heroe.getNivel() >= 2) {
-                                showAlert(R.string.entrarEnCombate);
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                        intent.putExtra("heroe", heroe);
-                                        intent.putExtra("seleccionEnemigo", 1);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }, 1500);
+                                showAlert(R.string.entrarEnCombate, 1, 1);
                             } else {
                                 //Ventana.comenzarSonido(sonidoNoLevel);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this);
-                                builder.setMessage(R.string.bajoNivel);
-                                final AlertDialog dialog1 = builder.show();
-                                TextView messageText = (TextView)dialog1.findViewById(android.R.id.message);
-                                messageText.setGravity(Gravity.CENTER);
-                                dialog1.show();
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        dialog1.dismiss();
-                                    }
-                                }, 1500);
+                                sonidoHuida.start();
+                                showAlert(R.string.bajoNivel, 0, 0);
                                 heroe.setExplorar(heroe.getExplorar() - 2);
                                 movimientoMapa();
                             }
@@ -294,73 +285,27 @@ public class ActivityPrincipal extends AppCompatActivity {
 
                         }
                         if (heroe.getExplorar() == 7) {
-                            showAlert(R.string.entrarEnTienda);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 0);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 2000);
-
+                            showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 8) {
 
                         }
                         if (heroe.getExplorar() == 9) {
-                            showAlert(R.string.entrarEnCombate);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 2);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnCombate, 1, 2);
                         }
                         if (heroe.getExplorar() == 10) {
 
                         }
                         if (heroe.getExplorar() == 11) {
-                            showAlert(R.string.entrarEnTienda);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 0);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 12) {
                             if (heroe.getNivel() >= 4) {
-                                showAlert(R.string.entrarEnCombate);
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                        intent.putExtra("heroe", heroe);
-                                        intent.putExtra("seleccionEnemigo", 3);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }, 1500);
+                                showAlert(R.string.entrarEnCombate, 1, 3);
                             } else {
+                                sonidoHuida.start();
                                 //Ventana.comenzarSonido(sonidoNoLevel);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this);
-                                builder.setMessage(R.string.bajoNivel);
-                                final AlertDialog dialog1 = builder.show();
-                                TextView messageText = (TextView)dialog1.findViewById(android.R.id.message);
-                                messageText.setGravity(Gravity.CENTER);
-                                dialog1.show();
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        dialog1.dismiss();
-                                    }
-                                }, 1500);
+                                showAlert(R.string.bajoNivel, 0, 0);
                                 heroe.setExplorar(heroe.getExplorar() - 2);
                                 movimientoMapa();
                             }
@@ -370,74 +315,28 @@ public class ActivityPrincipal extends AppCompatActivity {
 
                         }
                         if (heroe.getExplorar() == 14) {
-                            showAlert(R.string.entrarEnTienda);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 0);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 15) {
 
                         }
                         if (heroe.getExplorar() == 16) {
-                            showAlert(R.string.entrarEnCombate);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 4);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnCombate, 1, 4);
                         }
 
                         if (heroe.getExplorar() == 17) {
 
                         }
                         if (heroe.getExplorar() == 18) {
-                            showAlert(R.string.entrarEnTienda);
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                    intent.putExtra("heroe", heroe);
-                                    intent.putExtra("seleccionEnemigo", 0);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }, 1500);
+                            showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 19) {
                             if (heroe.getNivel() >= 7) {
-                                showAlert(R.string.entrarEnCombate);
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        heroe.setExplorar(20);
-                                        intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                                        intent.putExtra("heroe", heroe);
-                                        intent.putExtra("seleccionEnemigo", 5);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }, 1500);
+                                showAlert(R.string.entrarEnCombate, 1, 5);
                             } else {
+                                sonidoHuida.start();
                                 //Ventana.comenzarSonido(sonidoNoLevel);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this);
-                                builder.setMessage(R.string.bajoNivel);
-                                final AlertDialog dialog1 = builder.show();
-                                TextView messageText = (TextView)dialog1.findViewById(android.R.id.message);
-                                messageText.setGravity(Gravity.CENTER);
-                                dialog1.show();
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-                                        dialog1.dismiss();
-                                    }
-                                }, 1500);
+                                showAlert(R.string.bajoNivel, 0, 0);
                                 heroe.setExplorar(heroe.getExplorar() - 2);
                                 movimientoMapa();
                             }
@@ -495,17 +394,109 @@ public class ActivityPrincipal extends AppCompatActivity {
     public void irACreditos(View view) {
     }
 
-    public void showAlert(int mensaje){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    /**
+     * @param mensaje
+     * @param lugar         0 Solo mensaje, 1 Combate 2 Tienda 3 Area descanso 4 Eventos 5 Evento Afinidad
+     * @param numeroCombate
+     */
+    public void showAlert(int mensaje, int lugar, final int numeroCombate) {
+        imagenMapaFondo.setEnabled(false);
+        builder = new AlertDialog.Builder(this);
         builder.setMessage(mensaje);
-        AlertDialog dialog = builder.show();
-        TextView messageText = (TextView)dialog.findViewById(android.R.id.message);
+        dialog = builder.show();
+        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
         messageText.setGravity(Gravity.CENTER);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+
+        if (lugar == 0) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    imagenMapaFondo.setEnabled(true);
+                    dialog.dismiss();
+                }
+            }, 2000);
+        }
+        if (lugar == 1) {
+            sonidoMovimiento.start();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
+                    intent.putExtra("heroe", heroe);
+                    intent.putExtra("seleccionEnemigo", numeroCombate);
+                    startActivity(intent);
+                    dialog.dismiss();
+                    finish();
+                }
+            }, 2000);
+        }
+        if (lugar == 2) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
+                    intent.putExtra("heroe", heroe);
+                    intent.putExtra("seleccionEnemigo", numeroCombate);
+                    startActivity(intent);
+                    dialog.dismiss();
+                    finish();
+                }
+            }, 2000);
+        }
+        if (lugar == 3) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    //intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
+                    //intent.putExtra("heroe", heroe);
+                    //startActivity(intent);
+                    dialog.dismiss();
+                    //finish();
+                }
+            }, 2000);
+        }
+        if (lugar == 4) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    //intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
+                    //intent.putExtra("heroe", heroe);
+                    //startActivity(intent);
+                    dialog.dismiss();
+                    //finish();
+                }
+            }, 2000);
+        }
+        if (lugar == 5) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    //intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
+                    //intent.putExtra("heroe", heroe);
+                    //startActivity(intent);
+                    dialog.dismiss();
+                    //finish();
+                }
+            }, 2000);
+        }
+    }
+
+    public void desactivarBotones() {
+        botonCombateAleatorio.setEnabled(false);
+        botonGuardarPartida.setEnabled(false);
+        botonAreaDescanso.setEnabled(false);
+        botonSalir.setEnabled(false);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        if (sonidoMovimiento != null) {
+            sonidoMovimiento.stop();
+            sonidoMovimiento.release();
+        }
+        if (sonidoHuida != null) {
+            sonidoHuida.stop();
+            sonidoHuida.release();
+        }
     }
 
     @Override
     public void onBackPressed() {
     }
-
 }

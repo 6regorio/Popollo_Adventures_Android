@@ -13,7 +13,7 @@ public class CargarDatos {
     public CargarDatos() {
     }
 
-    public Heroe cargarHeroe(){
+    public Heroe cargarHeroe() {
         //CARGANDO HEROE
         //Habilidades Heroe
         ArrayList<Habilidad> habilidadesHeroe = new ArrayList<Habilidad>();
@@ -63,7 +63,7 @@ public class CargarDatos {
         return golem;
     }
 
-    public Enemigo cargarGoblin(){
+    public Enemigo cargarGoblin() {
         ArrayList<Habilidad> habilidadesGoblin = new ArrayList<Habilidad>();
         habilidadesGoblin.add(new Habilidad("Lanza envenenada", 3, 4, true));
         habilidadesGoblin.add(new Habilidad("Flecha venenosa", 4, 6, true));
@@ -73,7 +73,7 @@ public class CargarDatos {
         return goblin;
     }
 
-    public Enemigo cargarDeviling(){
+    public Enemigo cargarDeviling() {
         ArrayList<Habilidad> habilidadesPoring = new ArrayList<Habilidad>();
         habilidadesPoring.add(new Habilidad("Pedo magico", 2, 4, true));
         habilidadesPoring.add(new Habilidad("Tirar jellopy", 3, 6, true));
@@ -83,7 +83,7 @@ public class CargarDatos {
         return deviling;
     }
 
-    public Enemigo cargarPulpoi(){
+    public Enemigo cargarPulpoi() {
         ArrayList<Habilidad> habilidadesPulpoi = new ArrayList<Habilidad>();
         habilidadesPulpoi.add(new Habilidad("Cosquillas", 10, 10, true));
         habilidadesPulpoi.add(new Habilidad("Mirada viciosa", 15, 4, true));

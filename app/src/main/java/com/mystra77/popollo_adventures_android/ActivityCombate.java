@@ -112,21 +112,21 @@ public class ActivityCombate extends AppCompatActivity {
         activarInfoHeroe = true;
         activarInfoEnemigo = true;
 
-        textoAtributosHeroe.setText("Fuerza: " + heroe.getFuerza()+"\n" +
-                "Magia: " + heroe.getMagia() +"\n" +
-                "Defensa: " + heroe.getDefensa() +"\n" +
+        textoAtributosHeroe.setText("Fuerza: " + heroe.getFuerza() + "\n" +
+                "Magia: " + heroe.getMagia() + "\n" +
+                "Defensa: " + heroe.getDefensa() + "\n" +
                 "Agilidad: " + heroe.getAgilidad());
 
-        textoAtributosEnemigo.setText("Fuerza: " + enemigo.getFuerza()+"\n" +
-                "Magia: " + enemigo.getMagia() +"\n" +
-                "Defensa: " + enemigo.getDefensa() +"\n" +
+        textoAtributosEnemigo.setText("Fuerza: " + enemigo.getFuerza() + "\n" +
+                "Magia: " + enemigo.getMagia() + "\n" +
+                "Defensa: " + enemigo.getDefensa() + "\n" +
                 "Agilidad: " + enemigo.getAgilidad());
 
         musicaFondo = MediaPlayer.create(this, R.raw.fondo_combate);
-        musicaFondo.setVolume(0.4f,0.4f);
+        musicaFondo.setVolume(0.5f, 0.5f);
         musicaFondo.setLooping(true);
         musicaFondo.start();
-        sonidos = MediaPlayer.create(this,R.raw.sonido_ataque);
+        sonidos = MediaPlayer.create(this, R.raw.sonido_ataque);
     }
 
 
@@ -142,10 +142,10 @@ public class ActivityCombate extends AppCompatActivity {
         condicionVictoriaDerrota();
     }
 
-    public void sonidoAtacar(){
+    public void sonidoAtacar() {
         sonidos.release();
         sonidos = MediaPlayer.create(this, R.raw.sonido_ataque);
-        sonidos.setVolume(0.5f,0.5f);
+        sonidos.setVolume(0.5f, 0.5f);
         sonidos.start();
     }
 
@@ -155,19 +155,19 @@ public class ActivityCombate extends AppCompatActivity {
         botonHabilidad3.setEnabled(true);
         cajaBotonesHabilidades.setVisibility(View.VISIBLE);
         cajaBotonesPrincipales.setVisibility(View.GONE);
-        if (heroe.getMana() < heroe.getHabilidadesArray().get(0).getCoste()){
+        if (heroe.getMana() < heroe.getHabilidadesArray().get(0).getCoste()) {
             botonHabilidad1.setEnabled(false);
         }
-        if(heroe.getMana() < heroe.getHabilidadesArray().get(1).getCoste()){
+        if (heroe.getMana() < heroe.getHabilidadesArray().get(1).getCoste()) {
             botonHabilidad2.setEnabled(false);
         }
-        if(heroe.getMana() < heroe.getHabilidadesArray().get(2).getCoste()){
+        if (heroe.getMana() < heroe.getHabilidadesArray().get(2).getCoste()) {
             botonHabilidad3.setEnabled(false);
         }
     }
 
     public void lanzarHabilidad1(View view) {
-        logsLines.add(heroe.lanzarHechizo(enemigo,0));
+        logsLines.add(heroe.lanzarHechizo(enemigo, 0));
         turnoHeroe = false;
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -180,7 +180,7 @@ public class ActivityCombate extends AppCompatActivity {
     }
 
     public void lanzarHabilidad2(View view) {
-        logsLines.add(heroe.lanzarHechizo(enemigo,1));
+        logsLines.add(heroe.lanzarHechizo(enemigo, 1));
         turnoHeroe = false;
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -193,7 +193,7 @@ public class ActivityCombate extends AppCompatActivity {
     }
 
     public void lanzarHabilidad3(View view) {
-        logsLines.add(heroe.lanzarHechizo(enemigo,2));
+        logsLines.add(heroe.lanzarHechizo(enemigo, 2));
         turnoHeroe = false;
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -205,30 +205,31 @@ public class ActivityCombate extends AppCompatActivity {
         condicionVictoriaDerrota();
     }
 
-    public void sonidoExplosion(){
+    public void sonidoExplosion() {
         sonidos.release();
         sonidos = MediaPlayer.create(this, R.raw.sonido_explosion);
         sonidos.start();
     }
 
-    public void sonidoCuracion(){
+    public void sonidoCuracion() {
         sonidos.release();
         sonidos = MediaPlayer.create(this, R.raw.sonido_curacion);
         sonidos.start();
     }
+
     public void comandoObjetos(View view) {
         botonObjeto1.setEnabled(true);
         botonObjeto2.setEnabled(true);
         botonObjeto3.setEnabled(true);
         cajaBotonesObjetos.setVisibility(View.VISIBLE);
         cajaBotonesPrincipales.setVisibility(View.GONE);
-        if (heroe.getObjetosArray().get(0).getCantidad() == 0){
+        if (heroe.getObjetosArray().get(0).getCantidad() == 0) {
             botonObjeto1.setEnabled(false);
         }
-        if (heroe.getObjetosArray().get(1).getCantidad() == 0){
+        if (heroe.getObjetosArray().get(1).getCantidad() == 0) {
             botonObjeto2.setEnabled(false);
         }
-        if (heroe.getObjetosArray().get(2).getCantidad() == 0){
+        if (heroe.getObjetosArray().get(2).getCantidad() == 0) {
             botonObjeto3.setEnabled(false);
         }
     }
@@ -279,24 +280,24 @@ public class ActivityCombate extends AppCompatActivity {
         reiniciarMenu();
     }
 
-    public Enemigo encontrarEnemigo(int Seleccion){
-        if (Seleccion == 0){
+    public Enemigo encontrarEnemigo(int Seleccion) {
+        if (Seleccion == 0) {
             enemigo = cargarDatos.cargarPoring();
-        }else if(Seleccion == 1){
+        } else if (Seleccion == 1) {
             enemigo = cargarDatos.cargarNigromante();
-        }else if(Seleccion == 2){
+        } else if (Seleccion == 2) {
             enemigo = cargarDatos.cargarGolem();
-        }else if(Seleccion == 3){
+        } else if (Seleccion == 3) {
             enemigo = cargarDatos.cargarGoblin();
-        }else if(Seleccion == 4){
+        } else if (Seleccion == 4) {
             enemigo = cargarDatos.cargarDeviling();
-        }else if(Seleccion == 5){
+        } else if (Seleccion == 5) {
             enemigo = cargarDatos.cargarPulpoi();
         }
         return enemigo;
     }
 
-    public void modificarBarrasSaludMana(){
+    public void modificarBarrasSaludMana() {
         barraSaludHeroe.setMax(heroe.getSaludMaxima());
         barraSaludHeroe.setProgress(heroe.getSalud());
         saludHeroeCombate.setText(heroe.getSalud() + "/" + heroe.getSaludMaxima());
@@ -308,17 +309,17 @@ public class ActivityCombate extends AppCompatActivity {
         saludEnemigoCombate.setText(enemigo.getSalud() + "/" + enemigo.getSaludMaxima());
         barraManaEnemigo.setMax(enemigo.getManaMaximo());
         barraManaEnemigo.setProgress(enemigo.getMana());
-        manaEnemigoCombate.setText(enemigo.getMana()+ "/" + enemigo.getManaMaximo());
+        manaEnemigoCombate.setText(enemigo.getMana() + "/" + enemigo.getManaMaximo());
         adapterLog.notifyDataSetChanged();
     }
 
-    public void reiniciarMenu(){
+    public void reiniciarMenu() {
         cajaBotonesPrincipales.setVisibility(View.VISIBLE);
         cajaBotonesHabilidades.setVisibility(View.GONE);
         cajaBotonesObjetos.setVisibility(View.GONE);
     }
 
-    public void cargarMenuHeroeHabilidades(){
+    public void cargarMenuHeroeHabilidades() {
         botonHabilidad1.setText(heroe.getHabilidadesArray().get(0).getNombre() + " \n "
                 + "Daño: " + heroe.getHabilidadesArray().get(0).getPoder() * heroe.getMagia() + "\n"
                 + "Coste: " + heroe.getHabilidadesArray().get(0).getCoste() + " PM");
@@ -330,7 +331,7 @@ public class ActivityCombate extends AppCompatActivity {
                 + "Coste: " + heroe.getHabilidadesArray().get(2).getCoste() + " PM");
     }
 
-    public void cargarMenuHeroeObjetos(){
+    public void cargarMenuHeroeObjetos() {
         botonObjeto1.setText(heroe.getObjetosArray().get(0).getNombre() + "\n"
                 + "Daño: " + heroe.getObjetosArray().get(0).getPoder() + " \n"
                 + "Cantidad: " + heroe.getObjetosArray().get(0).getCantidad());
@@ -344,16 +345,17 @@ public class ActivityCombate extends AppCompatActivity {
                 + "Cantidad: " + heroe.getObjetosArray().get(2).getCantidad());
     }
 
-    public String turnoEnemigo(){
+    public String turnoEnemigo() {
         String resultado = "";
         final int numeroAleatorio = new Random().nextInt(2);
         desactivarMenu();
         handler.postDelayed(new Runnable() {
             public void run() {
-                if (numeroAleatorio == 0){
+                if (numeroAleatorio == 0) {
                     logsLines.add(enemigo.atacarObjetivo(heroe));
                     sonidoAtacar();
-                }if(numeroAleatorio == 1){
+                }
+                if (numeroAleatorio == 1) {
                     int numeroHabilidad = new Random().nextInt(2);
                     if (numeroHabilidad == 0) {
                         if (enemigo.getMana() >= enemigo.getHabilidadesArray().get(0).getCoste()) {
@@ -362,7 +364,7 @@ public class ActivityCombate extends AppCompatActivity {
                         } else {
                             logsLines.add(enemigo.getNombre() + " pierde la concentracion.");
                         }
-                    } else if(numeroHabilidad == 1) {
+                    } else if (numeroHabilidad == 1) {
                         if (enemigo.getMana() >= enemigo.getHabilidadesArray().get(1).getCoste()) {
                             logsLines.add(enemigo.lanzarHechizo(heroe, 1));
                             sonidoExplosion();
@@ -380,13 +382,13 @@ public class ActivityCombate extends AppCompatActivity {
         return resultado;
     }
 
-    public void desactivarMenu(){
+    public void desactivarMenu() {
         botonAtaque.setEnabled(false);
         botonHabilidad.setEnabled(false);
         botonObjeto.setEnabled(false);
     }
 
-    public void activarMenu(){
+    public void activarMenu() {
         botonAtaque.setEnabled(true);
         botonHabilidad.setEnabled(true);
         botonObjeto.setEnabled(true);
@@ -414,7 +416,7 @@ public class ActivityCombate extends AppCompatActivity {
                     botonVictoria.setVisibility(View.VISIBLE);
                 }
             }, 1000);
-        }else if(heroe.getSalud()<=0){
+        } else if (heroe.getSalud() <= 0) {
             musicaFondo.release();
             musicaFondo = MediaPlayer.create(this, R.raw.sonido_derrota);
             musicaFondo.setVolume(0.6f, 0.6f);
@@ -430,14 +432,14 @@ public class ActivityCombate extends AppCompatActivity {
                     botonDerrota.setVisibility(View.VISIBLE);
                 }
             }, 1000);
-        }else{
-            if(turnoHeroe == false){
+        } else {
+            if (turnoHeroe == false) {
                 turnoEnemigo();
             }
         }
     }
 
-    public void victoria(View view){
+    public void victoria(View view) {
         intent = new Intent(this, ActivityPrincipal.class);
         intent.putExtra("heroe", heroe);
         startActivity(intent);
@@ -445,7 +447,7 @@ public class ActivityCombate extends AppCompatActivity {
 
     }
 
-    public void derrota(View view){
+    public void derrota(View view) {
         intent = new Intent(this, MainActivity.class);
         intent.removeExtra("heroe");
         startActivity(intent);
@@ -453,10 +455,10 @@ public class ActivityCombate extends AppCompatActivity {
     }
 
     public void mostrarInformacionHeroe(View view) {
-        if (activarInfoHeroe){
+        if (activarInfoHeroe) {
             textoAtributosHeroe.setVisibility(View.VISIBLE);
             activarInfoHeroe = false;
-        }else{
+        } else {
             textoAtributosHeroe.setVisibility(View.INVISIBLE);
             activarInfoHeroe = true;
         }
@@ -464,10 +466,10 @@ public class ActivityCombate extends AppCompatActivity {
 
 
     public void mostrarInformacionEnemigo(View view) {
-        if (activarInfoEnemigo){
+        if (activarInfoEnemigo) {
             textoAtributosEnemigo.setVisibility(View.VISIBLE);
             activarInfoEnemigo = false;
-        }else{
+        } else {
             textoAtributosEnemigo.setVisibility(View.INVISIBLE);
             activarInfoEnemigo = true;
         }

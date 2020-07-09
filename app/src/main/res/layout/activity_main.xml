@@ -37,6 +37,7 @@
             android:layout_width="129dp"
             android:layout_height="wrap_content"
             android:text="@string/continuar"
+            android:onClick="continuarPartida"
             android:textSize="14sp" />
 
         <Button

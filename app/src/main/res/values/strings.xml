@@ -23,4 +23,5 @@
     <string name="ok">OK</string>
     <string name="primerPaso">¡¡¡FELICIDADES!!!\n^^ Has dado tu primer paso ^^</string>
     <string name="entrarEnCombate">Entrando en tu proximo combate OwO</string>
+    <string name="guardarPArtida">¿Quieres guardar la partida actual?</string>
 </resources>

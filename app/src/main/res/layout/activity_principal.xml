@@ -105,6 +105,7 @@
                 android:singleLine="true"
                 android:text="@string/areaDeDescanso"
                 android:textSize="14sp"
+                android:onClick="irADescanso"
                 android:visibility="visible" />
         </LinearLayout>
 
@@ -123,6 +124,7 @@
                 android:singleLine="true"
                 android:text="@string/guardarPartida"
                 android:textSize="14sp"
+                android:onClick="irAGuardar"
                 android:visibility="visible" />
 
             <Button
