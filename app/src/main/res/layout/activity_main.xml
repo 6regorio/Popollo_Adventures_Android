@@ -26,7 +26,7 @@
 
         <Button
             android:id="@+id/btnNuevaPartida"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="irAPrincipal"
             android:text="@string/nuevaPartida"
@@ -34,15 +34,15 @@
 
         <Button
             android:id="@+id/btnContinuar"
-            android:layout_width="129dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/continuar"
             android:onClick="continuarPartida"
+            android:text="@string/continuar"
             android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnSalir"
-            android:layout_width="129dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="salir"
             android:text="@string/salir"

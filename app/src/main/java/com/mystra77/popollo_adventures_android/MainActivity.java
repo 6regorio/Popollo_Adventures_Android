@@ -13,7 +13,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.mystra77.popollo_adventures_android.clases.Heroe;
+import com.mystra77.popollo_adventures_android.database.MyOpenHelper;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
@@ -21,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer sonidoBoton;
     private int lengthMusic;
     private Handler handler;
+    private boolean nuevaPartida;
+    private int continuarSiNo;
+    private Button botonContinuarPartida;
+    private MyOpenHelper moh;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +40,31 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        botonContinuarPartida = findViewById(R.id.btnContinuar);
+
         musicaFondo = MediaPlayer.create(this, R.raw.fondo_inicio);
         musicaFondo.setLooping(true);
         musicaFondo.start();
         sonidoBoton = MediaPlayer.create(this, R.raw.sonido_login);
         handler = new Handler();
+
+        moh = new MyOpenHelper(this);
+        moh.getWritableDatabase();
+
+        continuarSiNo = moh.registroPartidaGuardada();
+
+        if(continuarSiNo == 0){
+            botonContinuarPartida.setEnabled(false);
+        }
     }
 
     public void irAPrincipal(View view) {
+        nuevaPartida = true;
         mensajeInicio();
     }
 
     public void continuarPartida(View view) {
+        nuevaPartida = false;
         mensajeInicio();
     }
 
@@ -56,11 +78,12 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, ActivityPrincipal.class);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-        Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 dialog.dismiss();
                 intent = new Intent(MainActivity.this, ActivityPrincipal.class);
+                intent.putExtra("partida", nuevaPartida);
                 startActivity(intent);
                 finish();
             }

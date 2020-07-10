@@ -25,7 +25,7 @@
         android:padding="5dp"
         android:textAlignment="center"
         android:textColor="@color/borderEvento"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
@@ -126,11 +126,11 @@
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:maxLines="1"
+        android:onClick="salirDeTienda"
         android:singleLine="true"
-        android:text="@string/salir"
+        android:text="@string/volverAlMapa"
         android:textSize="14sp"
         android:visibility="visible"
-        android:onClick="salirDeTienda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

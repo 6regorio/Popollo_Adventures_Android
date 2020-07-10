@@ -149,7 +149,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="40dp"
-        android:background="@drawable/border_victoria_derrota"
+        android:background="@drawable/border_tienda"
         android:orientation="vertical"
         android:padding="10dp"
         android:visibility="gone"

@@ -5,36 +5,51 @@ public class Constants {
     /**
      * Constants used to help us with the database
      */
-    private static final String DATABASE_NAME = "Mystra77VisualNovel";
+    private static final String DATABASE_NAME = "Popollo_Adventures";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_GAME = "game";
-    private static final String KEY_ID = "id";
-    private static final String TIME = "time";
-    private static final String STAGE = "stage";
-    private static final String ANGEL = "angel";
-    private static final String NEKO = "neko";
-    private static final String WITCH = "witch";
-    private static final String SCORE = "score";
+    private static final String TABLE_GAME = "Popollo";
+    private static final String ID = "id";
+    private static final String NOMBRE = "nombre";
+    private static final String DINERO = "dinero";
+    private static final String NIVEL = "nivel";
+    private static final String EXPLORAR = "explorar";
+    private static final String REPUTACION = "reputacion";
+    private static final String EXPERIENCIA = "experiencia";
+    private static final String SALUD = "salud";
+    private static final String SALUDMAXIMA = "saludmaxima";
+    private static final String MANA = "mana";
+    private static final String MANAMAXIMO = "manamaximo";
+    private static final String FUERZA = "fuerza";
+    private static final String MAGIA = "magia";
+    private static final String AGILIDAD = "agilidad";
+    private static final String DEFENSA = "defensa";
+    private static final String OBJETO1 = "objeto1";
+    private static final String OBJETO2 = "objeto2";
+    private static final String OBJETO3 = "objeto3";
 
     /**
      * String used to create the table
      */
     private static final String CREATE_TABLE_GAME = "CREATE TABLE " + TABLE_GAME + "("
-            + KEY_ID + " INTEGER PRIMARY KEY NOT NULL, " + TIME + " TIMESTAMP DEFAULT 0, "
-            + STAGE + " INTEGER DEFAULT 1," + ANGEL + " INTEGER," + NEKO + " INTEGER," + WITCH + " INTEGER," + SCORE + " INTEGER);";
+            + ID + " INTEGER PRIMARY KEY NOT NULL, "
+            + NOMBRE + " VARCHAR(20), "
+            + DINERO + " INTEGER,"
+            + NIVEL + " INTEGER,"
+            + EXPLORAR + " INTEGER DEFAULT 0,"
+            + REPUTACION + " INTEGER,"
+            + EXPERIENCIA + " INTEGER,"
+            + SALUD + " INTEGER,"
+            + SALUDMAXIMA + " INTEGER,"
+            + MANA + " INTEGER,"
+            + MANAMAXIMO + " INTEGER,"
+            + FUERZA + " INTEGER,"
+            + MAGIA + " INTEGER,"
+            + AGILIDAD + " INTEGER,"
+            + DEFENSA + " INTEGER,"
+            + OBJETO1 + " INTEGER,"
+            + OBJETO2 + " INTEGER,"
+            + OBJETO3 + " INTEGER);";
 
-    /**
-     * Trigger that updates the time each time we update an entry
-     */
-    private static final String UPDATE_TIME_TRIGGER = "CREATE TRIGGER update_time_trigger " +
-            "AFTER UPDATE ON " + TABLE_GAME + " BEGIN " +
-            "UPDATE " + TABLE_GAME + " SET " + TIME + " = current_timestamp " +
-            "WHERE " + KEY_ID + " = old." + KEY_ID + ";" +
-            "END";
-
-    /*
-     * GETTERS that returns the value of the assigned String in each field
-     */
     public static String getDatabaseName() {
         return DATABASE_NAME;
     }
@@ -47,40 +62,75 @@ public class Constants {
         return TABLE_GAME;
     }
 
-    public static String getKeyId() {
-        return KEY_ID;
+    public static String getID() {
+        return ID;
     }
 
-    public static String getTIME() {
-        return TIME;
+    public static String getNOMBRE() {
+        return NOMBRE;
     }
 
-    public static String getSTAGE() {
-        return STAGE;
+    public static String getDINERO() {
+        return DINERO;
     }
 
-    public static String getANGEL() {
-        return ANGEL;
+    public static String getNIVEL() {
+        return NIVEL;
     }
 
-    public static String getNEKO() {
-        return NEKO;
+    public static String getEXPLORAR() {
+        return EXPLORAR;
     }
 
-    public static String getWITCH() {
-        return WITCH;
+    public static String getREPUTACION() {
+        return REPUTACION;
     }
 
-    public static String getSCORE() {
-        return SCORE;
+    public static String getEXPERIENCIA() {
+        return EXPERIENCIA;
     }
 
-    public static String getCreateTableGame() {
-        return CREATE_TABLE_GAME;
+    public static String getSALUD() {
+        return SALUD;
     }
 
-    public static String getUpdateTimeTrigger() {
-        return UPDATE_TIME_TRIGGER;
+    public static String getSALUDMAXIMA() {
+        return SALUDMAXIMA;
     }
 
+    public static String getMANA() {
+        return MANA;
+    }
+
+    public static String getMANAMAXIMO() { return MANAMAXIMO; }
+
+    public static String getFUERZA() {
+        return FUERZA;
+    }
+
+    public static String getMAGIA() {
+        return MAGIA;
+    }
+
+    public static String getAGILIDAD() {
+        return AGILIDAD;
+    }
+
+    public static String getDEFENSA() {
+        return DEFENSA;
+    }
+
+    public static String getOBJETO1() {
+        return OBJETO1;
+    }
+
+    public static String getOBJETO2() {
+        return OBJETO2;
+    }
+
+    public static String getOBJETO3() {
+        return OBJETO3;
+    }
+
+    public static String getCreateTableGame() { return CREATE_TABLE_GAME; }
 }

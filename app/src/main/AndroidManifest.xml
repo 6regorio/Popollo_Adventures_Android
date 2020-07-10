@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <activity android:name=".ActivityDescanso"></activity>
+        <activity android:name=".ActivityDescanso"
+            android:screenOrientation="landscape" ></activity>
         <activity
             android:name=".ActivityCreditos"
             android:screenOrientation="landscape" />

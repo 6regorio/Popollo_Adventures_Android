@@ -2,7 +2,6 @@ package com.mystra77.popollo_adventures_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -20,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mystra77.popollo_adventures_android.clases.Heroe;
+import com.mystra77.popollo_adventures_android.database.MyOpenHelper;
 import com.mystra77.popollo_adventures_android.datos.CargarDatos;
 
 import java.util.Random;
@@ -37,7 +37,9 @@ public class ActivityPrincipal extends AppCompatActivity {
     private Handler handler;
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
-    private MediaPlayer sonidoMovimiento, sonidoHuida;
+    private MediaPlayer sonidoMovimiento, sonidoHuida, sonidoGuardar;
+    private boolean nuevaPartida;
+    private MyOpenHelper moh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +65,22 @@ public class ActivityPrincipal extends AppCompatActivity {
 
         sonidoMovimiento = MediaPlayer.create(this, R.raw.sonido_mover);
         sonidoHuida = MediaPlayer.create(this, R.raw.sonido_retirada);
+        sonidoGuardar = MediaPlayer.create(this, R.raw.sonido_guardar);
 
         //Cargando Heroe
         cargarDatos = new CargarDatos();
         heroe = (Heroe) getIntent().getSerializableExtra("heroe");
+
+        moh = new MyOpenHelper(this);
+        moh.getWritableDatabase();
+
         if (heroe == null) {
-            heroe = cargarDatos.cargarHeroe();
+            nuevaPartida = (boolean) getIntent().getSerializableExtra("partida");
+            if(nuevaPartida){
+                heroe = cargarDatos.nuevoHeroe();
+            }else{
+                heroe = moh.loadGame();
+            }
         }
 
         textoExperiencia.setText("Nivel: " + heroe.getNivel() + "\n" +
@@ -87,6 +99,7 @@ public class ActivityPrincipal extends AppCompatActivity {
     }
 
     public void combatir(View view) {
+        sonidoMovimiento.start();
         desactivarBotones();
         int aleatorio = 0;
         if (heroe.getExplorar() >= 5 && heroe.getExplorar() < 9) {
@@ -103,7 +116,9 @@ public class ActivityPrincipal extends AppCompatActivity {
 
 
     public void irADescanso(View view) {
+        sonidoMovimiento.start();
         desactivarBotones();
+        showAlert(R.string.entrarAreaDescanso,4,0);
         //intent = new Intent(this, ActivityCombate.class);
         //intent.putExtra("heroe", heroe);
         //startActivity(intent);
@@ -111,6 +126,7 @@ public class ActivityPrincipal extends AppCompatActivity {
     }
 
     public void irAGuardar(View view) {
+        sonidoMovimiento.start();
         new AlertDialog.Builder(this)
                 .setMessage(R.string.guardarPArtida)
                 .setCancelable(false)
@@ -118,6 +134,8 @@ public class ActivityPrincipal extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        moh.saveGame(heroe);
+                        mensajeGuardar();
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -129,7 +147,27 @@ public class ActivityPrincipal extends AppCompatActivity {
                 .show();
     }
 
+    public void mensajeGuardar(){
+        sonidoGuardar.start();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.guardarPartida);
+        final Dialog dialog = builder.show();
+        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
+        intent = new Intent(this, MainActivity.class);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, 2000);
+    }
+
+
     public void salirAlMenu(View view) {
+        sonidoMovimiento.start();
         new AlertDialog.Builder(this)
                 .setMessage(R.string.irAMenuPrincipal)
                 .setCancelable(false)
@@ -298,7 +336,6 @@ public class ActivityPrincipal extends AppCompatActivity {
                                 movimientoMapa();
                             }
                         }
-
                         if (heroe.getExplorar() == 6) {
                             showAlert(R.string.eventoEspecial, 3, 1);
                         }
@@ -368,17 +405,6 @@ public class ActivityPrincipal extends AppCompatActivity {
                     }
                 })
                 .show();
-        /*
-
-        if (ventana.heroe.getExplorar() == 8) {
-            Ventana.origenADestino(ventana, "principal", "afinidad", 1);
-        }
-
-        if (ventana.heroe.getExplorar() == 15) {
-            Ventana.origenADestino(ventana, "principal", "afinidad", 1);
-        }
-        */
-
     }
 
     public void pasarMensaje(View view) {
@@ -448,18 +474,18 @@ public class ActivityPrincipal extends AppCompatActivity {
                     intent.putExtra("seleccionEvento", numeroCombateEvento);
                     startActivity(intent);
                     dialog.dismiss();
-                    //finish();
+                    finish();
                 }
             }, 2000);
         }
         if (lugar == 4) {
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    //intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                    //intent.putExtra("heroe", heroe);
-                    //startActivity(intent);
+                    intent = new Intent(ActivityPrincipal.this, ActivityDescanso.class);
+                    intent.putExtra("heroe", heroe);
+                    startActivity(intent);
                     dialog.dismiss();
-                    //finish();
+                    finish();
                 }
             }, 2000);
         }
@@ -492,6 +518,10 @@ public class ActivityPrincipal extends AppCompatActivity {
         if (sonidoHuida != null) {
             sonidoHuida.stop();
             sonidoHuida.release();
+        }
+        if (sonidoGuardar != null) {
+            sonidoGuardar.stop();
+            sonidoGuardar.release();
         }
     }
 
