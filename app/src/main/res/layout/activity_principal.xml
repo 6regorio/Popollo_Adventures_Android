@@ -28,6 +28,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:textAlignment="center"
+        android:textColor="@color/borderEvento"
         android:textSize="14sp"
         android:textStyle="bold"
         android:visibility="visible"
@@ -51,6 +52,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:textAlignment="center"
+            android:textColor="@color/borderEvento"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible" />
@@ -64,6 +66,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:textAlignment="center"
+            android:textColor="@color/borderEvento"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible" />
@@ -102,10 +105,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:maxLines="1"
+                android:onClick="irADescanso"
                 android:singleLine="true"
                 android:text="@string/areaDeDescanso"
                 android:textSize="14sp"
-                android:onClick="irADescanso"
                 android:visibility="visible" />
         </LinearLayout>
 
@@ -121,10 +124,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:maxLines="1"
+                android:onClick="irAGuardar"
                 android:singleLine="true"
                 android:text="@string/guardarPartida"
                 android:textSize="14sp"
-                android:onClick="irAGuardar"
                 android:visibility="visible" />
 
             <Button
@@ -163,7 +166,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/borderEvento"
             android:textSize="16sp"
             android:textStyle="bold" />
 

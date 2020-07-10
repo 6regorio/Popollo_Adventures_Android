@@ -3,7 +3,7 @@
     <!-- Define the background properties like color etc -->
     <item android:id="@android:id/background">
         <shape>
-            <stroke android:width="2dp" android:color="@color/borderBarraSaludMana" />
+            <stroke android:width="2dp" android:color="@color/borderEvento" />
         </shape>
     </item>
 </layer-list>

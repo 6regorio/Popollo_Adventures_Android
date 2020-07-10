@@ -2,7 +2,9 @@ package com.mystra77.popollo_adventures_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -134,12 +136,8 @@ public class ActivityPrincipal extends AppCompatActivity {
                 .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(ActivityPrincipal.this, MainActivity.class);
-                        intent.removeExtra("heroe");
-                        dialog.dismiss();
-                        moveTaskToBack(true);
-                        finish();
-                        startActivity(intent);
+                       dialog.dismiss();
+                       mensajeSalir();
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -149,6 +147,26 @@ public class ActivityPrincipal extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    public void mensajeSalir(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.salirInicio);
+        final Dialog dialog = builder.show();
+        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
+        intent = new Intent(this, MainActivity.class);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+                intent.removeExtra("heroe");
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
     }
 
     public void movimientoMapa() {
@@ -264,7 +282,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                             showAlert(R.string.entrarEnCombate, 1, 0);
                         }
                         if (heroe.getExplorar() == 3) {
-
+                            showAlert(R.string.eventoEspecial, 3, 0);
                         }
                         if (heroe.getExplorar() == 4) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -282,7 +300,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                         }
 
                         if (heroe.getExplorar() == 6) {
-
+                            showAlert(R.string.eventoEspecial, 3, 1);
                         }
                         if (heroe.getExplorar() == 7) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -294,7 +312,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                             showAlert(R.string.entrarEnCombate, 1, 2);
                         }
                         if (heroe.getExplorar() == 10) {
-
+                            showAlert(R.string.eventoEspecial, 3, 2);
                         }
                         if (heroe.getExplorar() == 11) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -312,7 +330,7 @@ public class ActivityPrincipal extends AppCompatActivity {
 
                         }
                         if (heroe.getExplorar() == 13) {
-
+                            showAlert(R.string.eventoEspecial, 3, 3);
                         }
                         if (heroe.getExplorar() == 14) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -325,7 +343,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                         }
 
                         if (heroe.getExplorar() == 17) {
-
+                            showAlert(R.string.eventoEspecial, 3, 4);
                         }
                         if (heroe.getExplorar() == 18) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -351,34 +369,15 @@ public class ActivityPrincipal extends AppCompatActivity {
                 })
                 .show();
         /*
-        if (ventana.heroe.getExplorar() == 3) {
-            Ventana.origenADestino(ventana, "principal", "evento", 0);
-        }
-        if (ventana.heroe.getExplorar() == 6) {
-            Ventana.origenADestino(ventana, "principal", "evento", 1);
-        }
 
         if (ventana.heroe.getExplorar() == 8) {
             Ventana.origenADestino(ventana, "principal", "afinidad", 1);
         }
 
-        if (ventana.heroe.getExplorar() == 10) {
-            Ventana.origenADestino(ventana, "principal", "evento", 2);
-        }
-        if (ventana.heroe.getExplorar() == 13) {
-            Ventana.origenADestino(ventana, "principal", "evento", 3);
-        }
-
         if (ventana.heroe.getExplorar() == 15) {
             Ventana.origenADestino(ventana, "principal", "afinidad", 1);
         }
-
-        if (ventana.heroe.getExplorar() == 17) {
-            Ventana.origenADestino(ventana, "principal", "evento", 4);
-        }
-
-
-         */
+        */
 
     }
 
@@ -397,9 +396,9 @@ public class ActivityPrincipal extends AppCompatActivity {
     /**
      * @param mensaje
      * @param lugar         0 Solo mensaje, 1 Combate 2 Tienda 3 Area descanso 4 Eventos 5 Evento Afinidad
-     * @param numeroCombate
+     * @param numeroCombateEvento
      */
-    public void showAlert(int mensaje, int lugar, final int numeroCombate) {
+    public void showAlert(int mensaje, int lugar, final int numeroCombateEvento) {
         imagenMapaFondo.setEnabled(false);
         builder = new AlertDialog.Builder(this);
         builder.setMessage(mensaje);
@@ -423,7 +422,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                 public void run() {
                     intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
                     intent.putExtra("heroe", heroe);
-                    intent.putExtra("seleccionEnemigo", numeroCombate);
+                    intent.putExtra("seleccionEnemigo", numeroCombateEvento);
                     startActivity(intent);
                     dialog.dismiss();
                     finish();
@@ -433,9 +432,8 @@ public class ActivityPrincipal extends AppCompatActivity {
         if (lugar == 2) {
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
+                    intent = new Intent(ActivityPrincipal.this, ActivityTienda.class);
                     intent.putExtra("heroe", heroe);
-                    intent.putExtra("seleccionEnemigo", numeroCombate);
                     startActivity(intent);
                     dialog.dismiss();
                     finish();
@@ -445,9 +443,10 @@ public class ActivityPrincipal extends AppCompatActivity {
         if (lugar == 3) {
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    //intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                    //intent.putExtra("heroe", heroe);
-                    //startActivity(intent);
+                    intent = new Intent(ActivityPrincipal.this, ActivityEvento.class);
+                    intent.putExtra("heroe", heroe);
+                    intent.putExtra("seleccionEvento", numeroCombateEvento);
+                    startActivity(intent);
                     dialog.dismiss();
                     //finish();
                 }

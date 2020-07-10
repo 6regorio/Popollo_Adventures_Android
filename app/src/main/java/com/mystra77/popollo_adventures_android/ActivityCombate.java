@@ -3,10 +3,13 @@ package com.mystra77.popollo_adventures_android;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,7 +32,7 @@ import java.util.Random;
 public class ActivityCombate extends AppCompatActivity {
     private ImageView imagenHeroeCombate, imagenEnemigoCombate;
     private TextView saludHeroeCombate, manaHeroeCombate, saludEnemigoCombate, manaEnemigoCombate,
-            textoVictoriaDerrota, textoAtributosHeroe, textoAtributosEnemigo;
+            textoVictoriaDerrota, textoAtributosHeroe, textoAtributosEnemigo, textoNombres;
     private ProgressBar barraSaludHeroe, barraManaHeroe, barraSaludEnemigo, barraManaEnemigo;
     private ListView combatLog;
     private ArrayAdapter<String> adapterLog;
@@ -88,6 +91,7 @@ public class ActivityCombate extends AppCompatActivity {
         textoVictoriaDerrota = findViewById(R.id.textViewVictoriaDerrota);
         textoAtributosHeroe = findViewById(R.id.textViewAtributosHeroe);
         textoAtributosEnemigo = findViewById(R.id.textViewAtributosEnemigo);
+        textoNombres = findViewById(R.id.textViewNombres);
 
         combatLog = findViewById(R.id.listViewCombatLog);
         logsLines = new ArrayList<String>();
@@ -127,6 +131,8 @@ public class ActivityCombate extends AppCompatActivity {
         musicaFondo.setLooping(true);
         musicaFondo.start();
         sonidos = MediaPlayer.create(this, R.raw.sonido_ataque);
+
+        textoNombres.setText(heroe.getNombre() + " VS " + enemigo.getNombre());
     }
 
 
@@ -440,18 +446,43 @@ public class ActivityCombate extends AppCompatActivity {
     }
 
     public void victoria(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.salirEvento);
+        final Dialog dialog = builder.show();
+        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
         intent = new Intent(this, ActivityPrincipal.class);
-        intent.putExtra("heroe", heroe);
-        startActivity(intent);
-        finish();
-
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+                intent.putExtra("heroe", heroe);
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
     }
 
     public void derrota(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.salirInicio);
+        final Dialog dialog = builder.show();
+        TextView messageText = (TextView) dialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
         intent = new Intent(this, MainActivity.class);
-        intent.removeExtra("heroe");
-        startActivity(intent);
-        finish();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+                intent.removeExtra("heroe");
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
     }
 
     public void mostrarInformacionHeroe(View view) {

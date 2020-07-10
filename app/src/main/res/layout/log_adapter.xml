@@ -9,7 +9,7 @@
     android:padding="10dp"
     android:singleLine="false"
     android:textAlignment="center"
-    android:textColor="@color/colorAccent"
+    android:textColor="@color/borderEvento"
     android:textSize="18sp"
     android:textStyle="italic"
     app:layout_constraintBottom_toBottomOf="parent"

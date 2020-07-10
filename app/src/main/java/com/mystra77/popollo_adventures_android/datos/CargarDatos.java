@@ -26,9 +26,9 @@ public class CargarDatos {
         objetosHeroe.add(new Objeto("Barril Explosivo", 60, 1, true, 400));
         objetosHeroe.add(new Objeto("Pocion de Mana", 30, 2, false, 250));
         //Atributos Heroe
-        Heroe heroe = new Heroe("Popollo", 500, 1, 0, 0,
-                0, 30, 30, 20, 20, 10,
-                5, 5, 5, habilidadesHeroe, objetosHeroe,
+        Heroe heroe = new Heroe("Popollo", 500, 1, 2, 0,
+                0, 30, 30, 20, 20, 100,
+                5, 50, 5, habilidadesHeroe, objetosHeroe,
                 R.drawable.combat_popollo, R.drawable.combat_popollo_death);
         return heroe;
     }

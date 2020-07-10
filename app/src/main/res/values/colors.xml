@@ -4,8 +4,13 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="barraManaVacia">#664602A8</color>
-    <color name="barraManaLlena">#4602A8</color>
+    <color name="barraManaLlena">#00BFFF</color>
     <color name="barraSaludVacia">#66FD074D</color>
-    <color name="barraSaludLlena">#FD074D</color>
-    <color name="borderBarraSaludMana">#FFEB3B</color>
+    <color name="barraSaludLlena">#FF0000</color>
+    <color name="rellenoPrincipal">#F0F0F0</color>
+    <color name="borderPrincipal">#000000</color>
+    <color name="rellenoEvento">#D0E8E2</color>
+    <color name="borderEvento">#000000</color>
+    <color name="rellenoTienda">#CCCCCC</color>
+    <color name="borderTienda">#000000</color>
 </resources>

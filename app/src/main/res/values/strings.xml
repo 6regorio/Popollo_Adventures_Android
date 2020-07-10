@@ -13,9 +13,17 @@
     <string name="no">No</string>
     <string name="cerrarJuego">¿Quieres cerrar el juego?</string>
     <string name="irAMenuPrincipal">¿Quieres salir al menú principal?</string>
+    <string name="salirDeLaTienda">¿Quieres salir de la tienda?</string>
+    <string name="mensajeSalirTienda">^^ Vuelve cuando quieras ^^</string>
+    <string name="mensajeAgradecimientoCompra">Compra realizada</string>
+    <string name="eventoEspecial">¡¡¡Evento Especial!!!</string>
     <string name="guardarPartida">Guardar Partida</string>
     <string name="combateAleatorio">Combate Aleatorio</string>
     <string name="areaDeDescanso">Area de Descanso</string>
+    <string name="salirEvento">Vuelves a tu camino</string>
+    <string name="salirInicio">Volviendo al menú de inicio</string>
+    <string name="iniciarPartida">Disfruta tu aventura</string>
+    <string name="salirDelJuego">Nos vemos pronto</string>
     <string name="info">Info</string>
     <string name="entrarEnTienda">"^^ Entrando en la tienda ^^"</string>
     <string name="bajoNivel">¡¡¡RETIRADA!!!\nNivel insuficiente </string>
@@ -24,4 +32,6 @@
     <string name="primerPaso">¡¡¡FELICIDADES!!!\n^^ Has dado tu primer paso ^^</string>
     <string name="entrarEnCombate">Entrando en tu proximo combate OwO</string>
     <string name="guardarPArtida">¿Quieres guardar la partida actual?</string>
+    <string name="objeto">OBJETOS</string>
+    <string name="atributos">ATRIBUTOS</string>
 </resources>

@@ -3,7 +3,7 @@
     <!-- Define the background properties like color etc -->
     <item android:id="@android:id/background">
         <shape>
-            <stroke android:width="2dp" android:color="@color/borderBarraSaludMana" />
+            <stroke android:width="2dp" android:color="@color/borderEvento" />
             <gradient
                 android:startColor="@color/barraManaVacia"
                 android:centerColor="@color/barraManaVacia"
@@ -18,7 +18,7 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <stroke android:width="2dp" android:color="@color/borderBarraSaludMana" />
+                <stroke android:width="2dp" android:color="@color/borderEvento" />
                 <gradient
                     android:startColor="@color/barraManaLlena"
                     android:centerColor="@color/barraManaLlena"
