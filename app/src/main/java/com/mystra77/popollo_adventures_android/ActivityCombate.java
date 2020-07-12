@@ -425,7 +425,7 @@ public class ActivityCombate extends AppCompatActivity {
         } else if (heroe.getSalud() <= 0) {
             musicaFondo.release();
             musicaFondo = MediaPlayer.create(this, R.raw.sonido_derrota);
-            musicaFondo.setVolume(0.6f, 0.6f);
+            musicaFondo.setVolume(0.8f, 0.8f);
             musicaFondo.start();
             imagenHeroeCombate.setImageResource(heroe.getImagenMuerte());
             desactivarMenu();

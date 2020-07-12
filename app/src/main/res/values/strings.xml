@@ -23,6 +23,8 @@
     <string name="salirDelDescanso">¿Quieres salir del area de descanso?</string>
     <string name="mensajeSalirTienda">^^ Vuelve cuando quieras ^^</string>
     <string name="mensajeAgradecimientoCompra">Compra realizada</string>
+    <string name="evento">¡¡¡Evento!!!</string>
+    <string name="creditos">^^ Disfruta de los creditos ^^</string>
     <string name="eventoEspecial">¡¡¡Evento Especial!!!</string>
     <string name="guardarPartida">Guardar Partida</string>
     <string name="combateAleatorio">Combate Aleatorio</string>

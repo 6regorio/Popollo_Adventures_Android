@@ -224,10 +224,10 @@ public class ActivityEvento extends AppCompatActivity {
     }
 
     public void continuarEvento(View view) {
-        mensajeAgradecimiento();
+        mensajeSalirEvento();
     }
 
-    public void mensajeAgradecimiento() {
+    public void mensajeSalirEvento() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.salirEvento);
         final Dialog dialog = builder.show();

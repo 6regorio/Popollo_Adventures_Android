@@ -320,7 +320,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                             showAlert(R.string.entrarEnCombate, 1, 0);
                         }
                         if (heroe.getExplorar() == 3) {
-                            showAlert(R.string.eventoEspecial, 3, 0);
+                            showAlert(R.string.evento, 3, 0);
                         }
                         if (heroe.getExplorar() == 4) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -337,19 +337,19 @@ public class ActivityPrincipal extends AppCompatActivity {
                             }
                         }
                         if (heroe.getExplorar() == 6) {
-                            showAlert(R.string.eventoEspecial, 3, 1);
+                            showAlert(R.string.evento, 3, 1);
                         }
                         if (heroe.getExplorar() == 7) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 8) {
-
+                            showAlert(R.string.eventoEspecial, 5, 0);
                         }
                         if (heroe.getExplorar() == 9) {
                             showAlert(R.string.entrarEnCombate, 1, 2);
                         }
                         if (heroe.getExplorar() == 10) {
-                            showAlert(R.string.eventoEspecial, 3, 2);
+                            showAlert(R.string.evento, 3, 2);
                         }
                         if (heroe.getExplorar() == 11) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -364,23 +364,22 @@ public class ActivityPrincipal extends AppCompatActivity {
                                 heroe.setExplorar(heroe.getExplorar() - 2);
                                 movimientoMapa();
                             }
-
                         }
                         if (heroe.getExplorar() == 13) {
-                            showAlert(R.string.eventoEspecial, 3, 3);
+                            showAlert(R.string.evento, 3, 3);
                         }
                         if (heroe.getExplorar() == 14) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
                         }
                         if (heroe.getExplorar() == 15) {
-
+                            showAlert(R.string.eventoEspecial, 5, 0);
                         }
                         if (heroe.getExplorar() == 16) {
                             showAlert(R.string.entrarEnCombate, 1, 4);
                         }
 
                         if (heroe.getExplorar() == 17) {
-                            showAlert(R.string.eventoEspecial, 3, 4);
+                            showAlert(R.string.evento, 3, 4);
                         }
                         if (heroe.getExplorar() == 18) {
                             showAlert(R.string.entrarEnTienda, 2, 0);
@@ -388,6 +387,7 @@ public class ActivityPrincipal extends AppCompatActivity {
                         if (heroe.getExplorar() == 19) {
                             if (heroe.getNivel() >= 7) {
                                 showAlert(R.string.entrarEnCombate, 1, 5);
+                                heroe.setExplorar(20);
                             } else {
                                 sonidoHuida.start();
                                 //Ventana.comenzarSonido(sonidoNoLevel);
@@ -417,6 +417,7 @@ public class ActivityPrincipal extends AppCompatActivity {
     }
 
     public void irACreditos(View view) {
+        showAlert(R.string.creditos, 6, 0);
     }
 
     /**
@@ -492,11 +493,21 @@ public class ActivityPrincipal extends AppCompatActivity {
         if (lugar == 5) {
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    //intent = new Intent(ActivityPrincipal.this, ActivityCombate.class);
-                    //intent.putExtra("heroe", heroe);
-                    //startActivity(intent);
+                    intent = new Intent(ActivityPrincipal.this, ActivityAfinidad.class);
+                    intent.putExtra("heroe", heroe);
+                    startActivity(intent);
                     dialog.dismiss();
-                    //finish();
+                    finish();
+                }
+            }, 2000);
+        }
+        if (lugar == 6) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    intent = new Intent(ActivityPrincipal.this, ActivityCreditos.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+                    finish();
                 }
             }, 2000);
         }
