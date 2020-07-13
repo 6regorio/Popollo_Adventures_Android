@@ -182,13 +182,13 @@ public class Personaje implements Serializable {
             objetivo.setSalud(objetivo.salud - dañoRealizado);
             return resultado = objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
         } else if (fallo) {
-            return resultado = nombre + " falla el ataque.";
+            return resultado = nombre + " no logra acertar el ataque.";
         } else {
             if (dañoRealizado > 0) {
                 objetivo.setSalud(objetivo.salud - dañoRealizado);
                 return resultado = objetivo.nombre + " recibe " + dañoRealizado + " puntos de daño.";
             } else {
-                return resultado = objetivo.nombre + " bloquea el ataque.";
+                return resultado = objetivo.nombre + " bloquea con exito el ataque.";
             }
         }
     }

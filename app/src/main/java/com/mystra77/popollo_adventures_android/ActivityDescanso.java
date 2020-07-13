@@ -53,19 +53,20 @@ public class ActivityDescanso extends AppCompatActivity {
     }
 
     public void curarHeridas(View view) {
-        mensajeCuracion(R.string.curacionRecibida);
         heroe.setDinero(heroe.getDinero() - 250);
         heroe.setSalud(heroe.getSaludMaxima());
+        mensajeCuracion(R.string.curacionRecibida);
     }
 
     public void curacionCompleta(View view) {
-        mensajeCuracion(R.string.curacionRecibida);
         heroe.setDinero(heroe.getDinero() - 500);
         heroe.setSalud(heroe.getSaludMaxima());
         heroe.setMana(heroe.getManaMaximo());
+        mensajeCuracion(R.string.curacionRecibida);
     }
 
     public void mensajeCuracion(int mensaje) {
+        mostrarDinero();
         sonidoCuracion.start();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(mensaje);
@@ -78,7 +79,6 @@ public class ActivityDescanso extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             public void run() {
                 dialog.dismiss();
-                mostrarDinero();
             }
         }, 2000);
     }
